@@ -90,6 +90,26 @@
     ]
   },
   {
+    "objectID": "Notebooks/Kendalls_tau.html#spatial-rank-correlation",
+    "href": "Notebooks/Kendalls_tau.html#spatial-rank-correlation",
+    "title": "Kendall rank correlation coefficient (Kendall’s tau)",
+    "section": "Spatial Rank Correlation",
+    "text": "Spatial Rank Correlation\n\nUsing Kendalls Tau for suitability mapping sensitivity Analysis\n\nIn a Weighted Linear Combination (WLC) or other GIS-MCDA, you often generate suitability rasters under different weighting schemes, e.g.:\n\nScenario A: baseline weights (e.g., 40% slope, 30% soil, 30% rainfall)\nScenario B: modified weights (e.g., 30% slope, 40% soil, 30% rainfall)\n\nEach raster cell gets a suitability score. You can rank cells (1 = most suitable) for each scenario, then compute Kendall’s \\(\\tau\\) between the two rankings.",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Kendall rank correlation coefficient (Kendall's tau)</span>"
+    ]
+  },
+  {
+    "objectID": "Notebooks/Kendalls_tau.html#simulated-mcda-suitability",
+    "href": "Notebooks/Kendalls_tau.html#simulated-mcda-suitability",
+    "title": "Kendall rank correlation coefficient (Kendall’s tau)",
+    "section": "simulated MCDA suitability",
+    "text": "simulated MCDA suitability\nWe will build two small 10x10 rasteres (100 cells):\nsuitability_A –&gt; Baseline Scenario suitability_B –&gt; slightly perturbed version (change one weight layer)\n\nThen flatted both to 1D arrays (each cell = one observation)\ncompute \\(\\tau\\) for the full map\nvisualize where ranks changed the most.\n\n\nnp.random.seed(42)\n\n# --- Step 1: create two synthetic suitability grids (values 1–10) ---\ngrid_size = 10\nsuitability_A = np.random.rand(grid_size, grid_size) * 9 + 1  # values in [1,10]\nsuitability_B = suitability_A + np.random.normal(0, 0.02, (grid_size, grid_size))  # add mild noise\nsuitability_B = np.clip(suitability_B, 1, 10)  # keep within same range\n\ndiff = suitability_A - suitability_B\n\n# --- Step 2: plot them side-by-side ---\nfig, axes = plt.subplots(1, 3, figsize=(10, 4))\n\nim1 = axes[0].imshow(suitability_A, cmap=\"YlGn\", vmin=1, vmax=10)\naxes[0].set_title(\"Scenario A — Baseline\")\naxes[0].axis(\"off\")\nplt.colorbar(im1, ax=axes[0], fraction=0.046, pad=0.04, label=\"Suitability (1–10)\")\n\nim2 = axes[1].imshow(suitability_B, cmap=\"YlGn\", vmin=1, vmax=10)\naxes[1].set_title(\"Scenario B — Perturbed\")\naxes[1].axis(\"off\")\nplt.colorbar(im2, ax=axes[1], fraction=0.046, pad=0.04, label=\"Suitability (1–10)\")\n\nim3 = axes[2].imshow(diff, cmap = 'RdBu', vmin = diff.min(), vmax = diff.max())\naxes[2].set_title(\"Difference (added noise)\")\naxes[2].axis('off')\nplt.colorbar(im3, ax=axes[2], fraction=0.046, pad = 0.04, label=\"Difference\")\n\nplt.tight_layout()\nplt.show()\n\n\n\n\n\n\n\n\n\n# --- Step 3: compute Kendall’s tau on the flattened ranks ---\nA_flat = suitability_A.flatten()\nB_flat = suitability_B.flatten()\n\nrank_A = pd.Series(A_flat).rank()\nrank_B = pd.Series(B_flat).rank()\n\ntau, pval = kendalltau(rank_A, rank_B)\nprint(f\"Overall spatial Kendall’s τ = {tau:.3f} -- Pvalue: {pval:.4f}\")\n\nOverall spatial Kendall’s τ = 0.997 -- Pvalue: 0.0000\n\n\n\nrank_diff = (rank_B - rank_A).values.reshape(grid_size, grid_size)\n\nplt.figure(figsize=(6,5))\nplt.imshow(rank_diff, cmap=\"BrBG\", vmin=rank_diff.min(), vmax=rank_diff.max())\nplt.colorbar(label=\"Rank difference (B − A)\")\nplt.title(\"Spatial distribution of rank changes\")\nplt.axis(\"off\")\nplt.tight_layout()\nplt.show()",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Kendall rank correlation coefficient (Kendall's tau)</span>"
+    ]
+  },
+  {
     "objectID": "summary.html",
     "href": "summary.html",
     "title": "3  Summary",
