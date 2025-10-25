@@ -9,6 +9,8 @@ book:
   chapters:
     - index.qmd
     - intro.qmd
+    - Notebooks\Kendalls_tau.ipynb
+    - Notebooks\Morris_Elementary_Effects.ipynb 
     - summary.qmd
     - references.qmd
 
