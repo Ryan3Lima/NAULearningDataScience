@@ -110,13 +110,93 @@
     ]
   },
   {
+    "objectID": "Notebooks/Morris_Elementary_Effects.html",
+    "href": "Notebooks/Morris_Elementary_Effects.html",
+    "title": "Morris Sensitivity Analysis (Elementary Effects Method)",
+    "section": "",
+    "text": "Why was Morris developed?\nIn global sensitivity analysis, the Morris Method (also called the Method of Elementary Effects) is a screening technique used to identify which input variables in a model have the greatest influence on the output. It was introduced by Max D. Morris in 1991 as a computationally efficient way to explore sensitivity in models with many inputs, without requiring an enormous number of model runs.\nThe basic idea is: - Change one input at a time by a small step, - See how much the output changes, - Repeat this from different starting points across the input space, - Summarize how consistently (or inconsistently) each input causes change.\nThat small one-at-a-time change in an input and the resulting change in the model output is called an elementary effect.\nBefore Morris (1991), sensitivity analysis often lived in two extremes:\nMax Morris was looking for something in-between:\nSo the Morris method is often described as a screening method: it’s a first pass that tells you which inputs matter and how they matter, so you know where to focus more detailed analysis later.",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Morris Sensitivity Analysis (Elementary Effects Method)</span>"
+    ]
+  },
+  {
+    "objectID": "Notebooks/Morris_Elementary_Effects.html#why-was-morris-developed",
+    "href": "Notebooks/Morris_Elementary_Effects.html#why-was-morris-developed",
+    "title": "Morris Sensitivity Analysis (Elementary Effects Method)",
+    "section": "",
+    "text": "Local / derivative-based sensitivity:\nThis asks “If I make a tiny change to one parameter around the current baseline, how much does the output change?”\nThis is basically a partial derivative.\nProblem: it only tells you about behavior near one point in parameter space, and it assumes smooth / linear behavior.\nFull global variance-based methods (like Sobol indices):\nThese methods try to quantify how much of the total output variance is explained by each input and by their interactions.\nThey’re extremely informative — but also computationally expensive, because they require a lot of model evaluations.\n\n\n\nA method that is global (explores the whole parameter space, not just one point),\nBut still cheap enough to run early, even for high-dimensional problems (many inputs),\nAnd able to flag inputs that are likely important, nonlinear, or interacting.",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Morris Sensitivity Analysis (Elementary Effects Method)</span>"
+    ]
+  },
+  {
+    "objectID": "Notebooks/Morris_Elementary_Effects.html#what-problems-does-the-morris-method-solve",
+    "href": "Notebooks/Morris_Elementary_Effects.html#what-problems-does-the-morris-method-solve",
+    "title": "Morris Sensitivity Analysis (Elementary Effects Method)",
+    "section": "What problems does the Morris method solve?",
+    "text": "What problems does the Morris method solve?\nImagine you have a model:\n\\[\ny = f(x_1, x_2, x_3, \\dots, x_k)\n\\]\nwhere each \\(x_i\\) is an input (a criterion weight, a threshold, a soil parameter, etc.), and \\(y\\) is some decision score (e.g. total suitability, predicted recharge, contaminant load, habitat score).\nYou want to know:\n\nWhich inputs have basically no effect on \\(y\\)? (Those might be safely fixed or ignored.)\nWhich inputs have a large overall effect on \\(y\\)? (These are important drivers.)\nWhich inputs behave nonlinearly or interact with other inputs?\n(For example, “slope only matters once soil permeability is high,” or “forest cover and precipitation together change infiltration potential in a way you don’t get by looking at either alone.”)\n\nThe Morris method gives you exactly that information with two summary statistics per input.",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Morris Sensitivity Analysis (Elementary Effects Method)</span>"
+    ]
+  },
+  {
+    "objectID": "Notebooks/Morris_Elementary_Effects.html#core-concept-the-elementary-effect",
+    "href": "Notebooks/Morris_Elementary_Effects.html#core-concept-the-elementary-effect",
+    "title": "Morris Sensitivity Analysis (Elementary Effects Method)",
+    "section": "Core concept: the Elementary Effect",
+    "text": "Core concept: the Elementary Effect\nFor each input \\(x_i\\), we define an elementary effect as:\n\\[\nEE_i = \\frac{f(x_1, \\dots, x_i + \\Delta, \\dots, x_k) - f(x_1, \\dots, x_i, \\dots, x_k)}{\\Delta}\n\\]\nWhere:\n\n\\(\\Delta\\) is a small step in the value of \\(x_i\\),\nAll other inputs are held constant for that step,\nThe numerator is “how much the output changed when we nudged just \\(x_i\\).”\n\nInterpretation:\n\n\\(EE_i\\) is basically: “If I change only \\(x_i\\) a little, how much does the model output respond?”\n\nBut — and this is the key difference from local sensitivity — we don’t do this just once from one baseline. We repeat this from multiple random locations in the input space. Each repetition gives us another possible elementary effect for that same input.\nSo for each input \\(x_i\\), we don’t just get one number. We get a distribution of elementary effects across the space of plausible inputs.",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Morris Sensitivity Analysis (Elementary Effects Method)</span>"
+    ]
+  },
+  {
+    "objectID": "Notebooks/Morris_Elementary_Effects.html#morris-summary-metrics",
+    "href": "Notebooks/Morris_Elementary_Effects.html#morris-summary-metrics",
+    "title": "Morris Sensitivity Analysis (Elementary Effects Method)",
+    "section": "Morris summary metrics",
+    "text": "Morris summary metrics\nAfter computing many elementary effects for each input, we summarize them. The two most common summaries are:\n\n\\(\\mu^*\\) (mu star):\nThe mean of the absolute value of the elementary effects for that input.\n\nHigh \\(\\mu^*\\) means: changing this input tends to cause a big change in the output overall.\n\nThis is interpreted as “overall importance” or “influence strength.”\n\nWe use the absolute value so positive and negative effects don’t cancel each other out.\n\\(\\sigma\\) (sigma):\nThe standard deviation of the elementary effects for that input.\n\nHigh \\(\\sigma\\) means: the effect of this input is not consistent — sometimes it has a big effect, sometimes small, sometimes positive, sometimes negative.\n\nThat usually indicates nonlinearity or interactions with other inputs.\n\nIntuition: if an input only mattered under certain combinations of other inputs, you’d see a wide spread in its elementary effects → high σ.\n\nThis gives you a beautiful diagnostic plot: μ* on the x-axis (importance) vs σ on the y-axis (interaction / nonlinearity).\n\nInputs with low μ* and low σ → mostly irrelevant.\nInputs with high μ* and low σ → consistently important, mostly linear effect on the output.\nInputs with high μ* and high σ → important but tricky: nonlinear or involved in interactions.\n\nThat’s the classic “Morris scatter plot.”",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Morris Sensitivity Analysis (Elementary Effects Method)</span>"
+    ]
+  },
+  {
+    "objectID": "Notebooks/Morris_Elementary_Effects.html#how-it-works-conceptually",
+    "href": "Notebooks/Morris_Elementary_Effects.html#how-it-works-conceptually",
+    "title": "Morris Sensitivity Analysis (Elementary Effects Method)",
+    "section": "How it works (conceptually)",
+    "text": "How it works (conceptually)\n\nDefine ranges (or distributions) for each input \\(x_i\\).\nExample: slope weight in WLC could vary from 0.1 to 0.4, precipitation weight from 0.2 to 0.6, etc.\nSample a sequence of points in that input space (called “trajectories” or “paths”).\nEach path walks through the space one input at a time, changing one variable by \\(\\Delta\\) while keeping the others fixed, then moving on to the next variable, etc.\nFor each step along that path, compute the elementary effect \\(EE_i\\).\nAggregate all the elementary effects for each input across all paths → get \\(μ^*\\) and \\(\\sigma\\).\nRank or plot inputs based on \\(\\mu^*\\) and σ to decide which inputs matter.\n\nThis is global because you’re sampling across the full allowable range of inputs — not just perturbing around a single baseline point.",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Morris Sensitivity Analysis (Elementary Effects Method)</span>"
+    ]
+  },
+  {
+    "objectID": "Notebooks/Morris_Elementary_Effects.html#why-this-is-used",
+    "href": "Notebooks/Morris_Elementary_Effects.html#why-this-is-used",
+    "title": "Morris Sensitivity Analysis (Elementary Effects Method)",
+    "section": "Why this is used",
+    "text": "Why this is used\nThe Morris method is widely used in:\n\nEnvironmental modeling and hydrology (e.g., identifying which hydrogeologic parameters most influence recharge estimates or contaminant transport),\nEcological and habitat suitability modeling,\nGroundwater recharge / infiltration models,\nFlood and erosion models,\nMulti-criteria decision analysis (MCDA), including GIS-based suitability mapping, to see which criteria weights dominate the final suitability score, and where there are strong interactions.\n\nIn practice:\n\nYou run Morris first to screen out unimportant variables (so you don’t waste computation on them),\nThen you apply heavier methods (like Sobol variance decomposition) on the variables that survived screening.\n\nSo Morris is both:\n\nA science tool (which parameters actually matter?),\nA workflow tool (where should I spend my expensive computation time?).",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Morris Sensitivity Analysis (Elementary Effects Method)</span>"
+    ]
+  },
+  {
+    "objectID": "Notebooks/Morris_Elementary_Effects.html#summary",
+    "href": "Notebooks/Morris_Elementary_Effects.html#summary",
+    "title": "Morris Sensitivity Analysis (Elementary Effects Method)",
+    "section": "Summary",
+    "text": "Summary\n\nThe Morris method is a global, one-factor-at-a-time sensitivity screening method introduced by Max D. Morris in 1991.\nIt’s built around elementary effects: the change in model output when you nudge one input while holding others constant.\nBy repeating that across many starting points, you get a distribution of effects for each input.\nYou then summarize each input with:\n\n\\(\\mu^*\\) (mean absolute elementary effect): how influential this input is overall,\n\\(\\sigma\\) (stdev of elementary effects): how nonlinear or interaction-heavy its influence is.\n\nThis is incredibly helpful in decision-support models (like WLC suitability mapping) because it tells you:\n\nwhich criteria weights dominate suitability,\nwhich ones only matter in combination,\nand which ones are basically irrelevant.\n\n\n\nNext, we’ll:\n\nBuild a tiny synthetic model in Python so you can see elementary effects for a toy function,\nCompute \\(\\mu^*\\) and \\(\\sigma\\) for each input manually,\nReproduce what SALib’s morris routines do,\nVisualize \\(\\mu^*\\) vs \\(\\sigma\\),\nThen connect that to a spatial WLC / MCDA setting.\n\n\nNow let’s start generating elementary effects for a simple model in Python.",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Morris Sensitivity Analysis (Elementary Effects Method)</span>"
+    ]
+  },
+  {
     "objectID": "summary.html",
     "href": "summary.html",
-    "title": "3  Summary",
+    "title": "4  Summary",
     "section": "",
     "text": "In summary, this book has no content whatsoever.",
     "crumbs": [
-      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Summary</span>"
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Summary</span>"
     ]
   },
   {

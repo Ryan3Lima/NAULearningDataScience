@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>1&nbsp; Introduction – NAULearningDataScience</title>
+<title>Morris Sensitivity Analysis (Elementary Effects Method) – NAULearningDataScience</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,47 +20,27 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-/* CSS for citations */
-div.csl-bib-body { }
-div.csl-entry {
-  clear: both;
-  margin-bottom: 0em;
-}
-.hanging-indent div.csl-entry {
-  margin-left:2em;
-  text-indent:-2em;
-}
-div.csl-left-margin {
-  min-width:2em;
-  float:left;
-}
-div.csl-right-inline {
-  margin-left:2em;
-  padding-left:1em;
-}
-div.csl-indent {
-  margin-left: 2em;
-}</style>
+</style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/quarto-nav/headroom.min.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<link href="./Notebooks/Kendalls_tau.html" rel="next">
-<link href="./index.html" rel="prev">
-<script src="site_libs/quarto-html/quarto.js"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-e26003cea8cd680ca0c55a263523d882.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-8da5b4427184b79ecddefad3d342027e.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../summary.html" rel="next">
+<link href="../Notebooks/Kendalls_tau.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-e26003cea8cd680ca0c55a263523d882.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-8da5b4427184b79ecddefad3d342027e.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -89,6 +69,35 @@ div.csl-indent {
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -101,7 +110,7 @@ div.csl-indent {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./intro.html"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../Notebooks/Morris_Elementary_Effects.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Morris Sensitivity Analysis (Elementary Effects Method)</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -116,7 +125,7 @@ div.csl-indent {
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
-      <a href="./">NAULearningDataScience</a> 
+      <a href="../">NAULearningDataScience</a> 
     </div>
       </div>
         <div class="mt-2 flex-shrink-0 align-items-center">
@@ -128,37 +137,37 @@ div.csl-indent {
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./index.html" class="sidebar-item-text sidebar-link">
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Preface</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./intro.html" class="sidebar-item-text sidebar-link active">
+  <a href="../intro.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./Notebooks/Kendalls_tau.html" class="sidebar-item-text sidebar-link">
+  <a href="../Notebooks/Kendalls_tau.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Kendall rank correlation coefficient (Kendall’s tau)</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./Notebooks/Morris_Elementary_Effects.html" class="sidebar-item-text sidebar-link">
+  <a href="../Notebooks/Morris_Elementary_Effects.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Morris Sensitivity Analysis (Elementary Effects Method)</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./summary.html" class="sidebar-item-text sidebar-link">
+  <a href="../summary.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Summary</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./references.html" class="sidebar-item-text sidebar-link">
+  <a href="../references.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">References</span></a>
   </div>
 </li>
@@ -167,15 +176,27 @@ div.csl-indent {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#why-was-morris-developed" id="toc-why-was-morris-developed" class="nav-link active" data-scroll-target="#why-was-morris-developed">Why was Morris developed?</a></li>
+  <li><a href="#what-problems-does-the-morris-method-solve" id="toc-what-problems-does-the-morris-method-solve" class="nav-link" data-scroll-target="#what-problems-does-the-morris-method-solve">What problems does the Morris method solve?</a></li>
+  <li><a href="#core-concept-the-elementary-effect" id="toc-core-concept-the-elementary-effect" class="nav-link" data-scroll-target="#core-concept-the-elementary-effect">Core concept: the Elementary Effect</a></li>
+  <li><a href="#morris-summary-metrics" id="toc-morris-summary-metrics" class="nav-link" data-scroll-target="#morris-summary-metrics">Morris summary metrics</a></li>
+  <li><a href="#how-it-works-conceptually" id="toc-how-it-works-conceptually" class="nav-link" data-scroll-target="#how-it-works-conceptually">How it works (conceptually)</a></li>
+  <li><a href="#why-this-is-used" id="toc-why-this-is-used" class="nav-link" data-scroll-target="#why-this-is-used">Why this is used</a></li>
+  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary">Summary</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></h1>
+<h1 class="title">Morris Sensitivity Analysis (Elementary Effects Method)</h1>
 </div>
 
 
@@ -192,15 +213,167 @@ div.csl-indent {
 </header>
 
 
-<p>This is a book created from markdown and executable code.</p>
-<p>See <span class="citation" data-cites="knuth84">Knuth (<a href="references.html#ref-knuth84" role="doc-biblioref">1984</a>)</span> for additional discussion of literate programming.</p>
+<p>In global sensitivity analysis, the <strong>Morris Method</strong> (also called the <em>Method of Elementary Effects</em>) is a screening technique used to identify which input variables in a model have the greatest influence on the output. It was introduced by Max D. Morris in 1991 as a computationally efficient way to explore sensitivity in models with many inputs, without requiring an enormous number of model runs.</p>
+<p>The basic idea is: - Change one input at a time by a small step, - See how much the output changes, - Repeat this from different starting points across the input space, - Summarize how consistently (or inconsistently) each input causes change.</p>
+<p>That small one-at-a-time change in an input and the resulting change in the model output is called an <strong>elementary effect</strong>.</p>
+<hr>
+<section id="why-was-morris-developed" class="level2">
+<h2 class="anchored" data-anchor-id="why-was-morris-developed">Why was Morris developed?</h2>
+<p>Before Morris (1991), sensitivity analysis often lived in two extremes:</p>
+<ul>
+<li><p><strong>Local / derivative-based sensitivity</strong>:</p>
+<p>This asks “If I make a tiny change to one parameter around the current baseline, how much does the output change?”<br>
+This is basically a partial derivative.<br>
+Problem: it only tells you about behavior <em>near one point</em> in parameter space, and it assumes smooth / linear behavior.</p></li>
+<li><p><strong>Full global variance-based methods (like Sobol indices)</strong>:</p>
+<p>These methods try to quantify how much of the total output variance is explained by each input and by their interactions.<br>
+They’re extremely informative — but also computationally expensive, because they require a lot of model evaluations.</p></li>
+</ul>
+<p>Max Morris was looking for something in-between:</p>
+<ul>
+<li>A method that is <strong>global</strong> (explores the whole parameter space, not just one point),</li>
+<li>But still <strong>cheap enough</strong> to run early, even for high-dimensional problems (many inputs),</li>
+<li>And able to flag inputs that are likely important, nonlinear, or interacting.</li>
+</ul>
+<p>So the Morris method is often described as a <strong>screening method</strong>: it’s a first pass that tells you which inputs matter and how they matter, so you know where to focus more detailed analysis later.</p>
+<hr>
+</section>
+<section id="what-problems-does-the-morris-method-solve" class="level2">
+<h2 class="anchored" data-anchor-id="what-problems-does-the-morris-method-solve">What problems does the Morris method solve?</h2>
+<p>Imagine you have a model:</p>
+<p><span class="math display">\[
+y = f(x_1, x_2, x_3, \dots, x_k)
+\]</span></p>
+<p>where each <span class="math inline">\(x_i\)</span> is an input (a criterion weight, a threshold, a soil parameter, etc.), and <span class="math inline">\(y\)</span> is some decision score (e.g.&nbsp;total suitability, predicted recharge, contaminant load, habitat score).</p>
+<p>You want to know:</p>
+<ol type="1">
+<li>Which inputs have basically <strong>no effect</strong> on <span class="math inline">\(y\)</span>? (Those might be safely fixed or ignored.)</li>
+<li>Which inputs have a <strong>large overall effect</strong> on <span class="math inline">\(y\)</span>? (These are important drivers.)</li>
+<li>Which inputs behave <strong>nonlinearly</strong> or <strong>interact</strong> with other inputs?<br>
+(For example, “slope only matters once soil permeability is high,” or “forest cover and precipitation together change infiltration potential in a way you don’t get by looking at either alone.”)</li>
+</ol>
+<p>The Morris method gives you exactly that information with two summary statistics per input.</p>
+<hr>
+</section>
+<section id="core-concept-the-elementary-effect" class="level2">
+<h2 class="anchored" data-anchor-id="core-concept-the-elementary-effect">Core concept: the Elementary Effect</h2>
+<p>For each input <span class="math inline">\(x_i\)</span>, we define an <em>elementary effect</em> as:</p>
+<p><span class="math display">\[
+EE_i = \frac{f(x_1, \dots, x_i + \Delta, \dots, x_k) - f(x_1, \dots, x_i, \dots, x_k)}{\Delta}
+\]</span></p>
+<p>Where:</p>
+<ul>
+<li><span class="math inline">\(\Delta\)</span> is a small step in the value of <span class="math inline">\(x_i\)</span>,</li>
+<li>All other inputs are held constant for that step,</li>
+<li>The numerator is “how much the output changed when we nudged just <span class="math inline">\(x_i\)</span>.”</li>
+</ul>
+<p>Interpretation:</p>
+<ul>
+<li><span class="math inline">\(EE_i\)</span> is basically: “If I change only <span class="math inline">\(x_i\)</span> a little, how much does the model output respond?”</li>
+</ul>
+<p>But — and this is the key difference from local sensitivity — we don’t do this just once from one baseline. We repeat this from <em>multiple random locations</em> in the input space. Each repetition gives us another possible elementary effect for that same input.</p>
+<p>So for each input <span class="math inline">\(x_i\)</span>, we don’t just get one number. We get a distribution of elementary effects across the space of plausible inputs.</p>
+<hr>
+</section>
+<section id="morris-summary-metrics" class="level2">
+<h2 class="anchored" data-anchor-id="morris-summary-metrics">Morris summary metrics</h2>
+<p>After computing many elementary effects for each input, we summarize them. The two most common summaries are:</p>
+<ol type="1">
+<li><p><strong><span class="math inline">\(\mu^*\)</span></strong> (mu star):</p>
+<p>The mean of the <em>absolute value</em> of the elementary effects for that input.</p>
+<ul>
+<li>High <span class="math inline">\(\mu^*\)</span> means: changing this input tends to cause a big change in the output overall.<br>
+</li>
+<li>This is interpreted as “overall importance” or “influence strength.”</li>
+</ul>
+<p>We use the absolute value so positive and negative effects don’t cancel each other out.</p></li>
+<li><p><strong><span class="math inline">\(\sigma\)</span></strong> (sigma):</p>
+<p>The standard deviation of the elementary effects for that input.</p>
+<ul>
+<li>High <span class="math inline">\(\sigma\)</span> means: the effect of this input is not consistent — sometimes it has a big effect, sometimes small, sometimes positive, sometimes negative.<br>
+</li>
+<li>That usually indicates <strong>nonlinearity</strong> or <strong>interactions with other inputs</strong>.</li>
+</ul>
+<p>Intuition: if an input only mattered under certain combinations of other inputs, you’d see a wide spread in its elementary effects → high σ.</p></li>
+</ol>
+<p>This gives you a beautiful diagnostic plot: μ* on the x-axis (importance) vs σ on the y-axis (interaction / nonlinearity).</p>
+<ul>
+<li>Inputs with <strong>low μ*</strong> and <strong>low σ</strong> → mostly irrelevant.</li>
+<li>Inputs with <strong>high μ*</strong> and <strong>low σ</strong> → consistently important, mostly linear effect on the output.</li>
+<li>Inputs with <strong>high μ*</strong> and <strong>high σ</strong> → important but tricky: nonlinear or involved in interactions.</li>
+</ul>
+<p>That’s the classic “Morris scatter plot.”</p>
+<hr>
+</section>
+<section id="how-it-works-conceptually" class="level2">
+<h2 class="anchored" data-anchor-id="how-it-works-conceptually">How it works (conceptually)</h2>
+<ol type="1">
+<li><p>Define ranges (or distributions) for each input <span class="math inline">\(x_i\)</span>.<br>
+Example: slope weight in WLC could vary from 0.1 to 0.4, precipitation weight from 0.2 to 0.6, etc.</p></li>
+<li><p>Sample a sequence of points in that input space (called “trajectories” or “paths”).<br>
+Each path walks through the space one input at a time, changing one variable by <span class="math inline">\(\Delta\)</span> while keeping the others fixed, then moving on to the next variable, etc.</p></li>
+<li><p>For each step along that path, compute the elementary effect <span class="math inline">\(EE_i\)</span>.</p></li>
+<li><p>Aggregate all the elementary effects for each input across all paths → get <span class="math inline">\(μ^*\)</span> and <span class="math inline">\(\sigma\)</span>.</p></li>
+<li><p>Rank or plot inputs based on <span class="math inline">\(\mu^*\)</span> and σ to decide which inputs matter.</p></li>
+</ol>
+<p>This is global because you’re sampling across the full allowable range of inputs — not just perturbing around a single baseline point.</p>
+<hr>
+</section>
+<section id="why-this-is-used" class="level2">
+<h2 class="anchored" data-anchor-id="why-this-is-used">Why this is used</h2>
+<p>The Morris method is widely used in:</p>
+<ul>
+<li>Environmental modeling and hydrology (e.g., identifying which hydrogeologic parameters most influence recharge estimates or contaminant transport),</li>
+<li>Ecological and habitat suitability modeling,</li>
+<li>Groundwater recharge / infiltration models,</li>
+<li>Flood and erosion models,</li>
+<li>Multi-criteria decision analysis (MCDA), including GIS-based suitability mapping, to see which criteria weights dominate the final suitability score, and where there are strong interactions.</li>
+</ul>
+<p>In practice:</p>
+<ul>
+<li>You run Morris first to screen out unimportant variables (so you don’t waste computation on them),</li>
+<li>Then you apply heavier methods (like Sobol variance decomposition) on the variables that survived screening.</li>
+</ul>
+<p>So Morris is both:</p>
+<ol type="1">
+<li>A science tool (which parameters actually matter?),</li>
+<li>A workflow tool (where should I spend my expensive computation time?).</li>
+</ol>
+<hr>
+</section>
+<section id="summary" class="level2">
+<h2 class="anchored" data-anchor-id="summary">Summary</h2>
+<ul>
+<li>The Morris method is a global, one-factor-at-a-time sensitivity screening method introduced by Max D. Morris in 1991.</li>
+<li>It’s built around <strong>elementary effects</strong>: the change in model output when you nudge one input while holding others constant.</li>
+<li>By repeating that across many starting points, you get a <em>distribution</em> of effects for each input.</li>
+<li>You then summarize each input with:
+<ul>
+<li><strong><span class="math inline">\(\mu^*\)</span></strong> (mean absolute elementary effect): how influential this input is overall,</li>
+<li><strong><span class="math inline">\(\sigma\)</span></strong> (stdev of elementary effects): how nonlinear or interaction-heavy its influence is.</li>
+</ul></li>
+<li>This is incredibly helpful in decision-support models (like WLC suitability mapping) because it tells you:
+<ul>
+<li>which criteria weights dominate suitability,</li>
+<li>which ones only matter in combination,</li>
+<li>and which ones are basically irrelevant.</li>
+</ul></li>
+</ul>
+<hr>
+<p>Next, we’ll:</p>
+<ol type="1">
+<li>Build a tiny synthetic model in Python so you can <em>see</em> elementary effects for a toy function,</li>
+<li>Compute <span class="math inline">\(\mu^*\)</span> and <span class="math inline">\(\sigma\)</span> for each input manually,</li>
+<li>Reproduce what SALib’s <code>morris</code> routines do,</li>
+<li>Visualize <span class="math inline">\(\mu^*\)</span> vs <span class="math inline">\(\sigma\)</span>,</li>
+<li>Then connect that to a spatial WLC / MCDA setting.</li>
+</ol>
+<blockquote class="blockquote">
+<p>Now let’s start generating elementary effects for a simple model in Python.</p>
+</blockquote>
 
 
-<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list" style="display: none">
-<div id="ref-knuth84" class="csl-entry" role="listitem">
-Knuth, Donald E. 1984. <span>“Literate Programming.”</span> <em>Comput. J.</em> 27 (2): 97–111. <a href="https://doi.org/10.1093/comjnl/27.2.97">https://doi.org/10.1093/comjnl/27.2.97</a>.
-</div>
-</div>
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -622,13 +795,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./index.html" class="pagination-link" aria-label="Preface">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Preface</span>
+      <a href="../Notebooks/Kendalls_tau.html" class="pagination-link" aria-label="Kendall rank correlation coefficient (Kendall's tau)">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Kendall rank correlation coefficient (Kendall’s tau)</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./Notebooks/Kendalls_tau.html" class="pagination-link" aria-label="Kendall rank correlation coefficient (Kendall's tau)">
-        <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Kendall rank correlation coefficient (Kendall’s tau)</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../summary.html" class="pagination-link" aria-label="Summary">
+        <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Summary</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
