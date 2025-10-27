@@ -20,10 +20,44 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
-<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script><script src="../site_libs/quarto-nav/quarto-nav.js"></script>
 <script src="../site_libs/quarto-nav/headroom.min.js"></script>
 <script src="../site_libs/clipboard/clipboard.min.js"></script>
 <script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
@@ -68,6 +102,9 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
@@ -187,7 +224,36 @@ window.Quarto = {
   <li><a href="#morris-summary-metrics" id="toc-morris-summary-metrics" class="nav-link" data-scroll-target="#morris-summary-metrics">Morris summary metrics</a></li>
   <li><a href="#how-it-works-conceptually" id="toc-how-it-works-conceptually" class="nav-link" data-scroll-target="#how-it-works-conceptually">How it works (conceptually)</a></li>
   <li><a href="#why-this-is-used" id="toc-why-this-is-used" class="nav-link" data-scroll-target="#why-this-is-used">Why this is used</a></li>
-  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary">Summary</a></li>
+  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary">Summary</a>
+  <ul class="collapse">
+  <li><a href="#interpretation" id="toc-interpretation" class="nav-link" data-scroll-target="#interpretation">interpretation:</a></li>
+  </ul></li>
+  <li><a href="#applying-morris-elementary-effects-to-a-real-dataset-the-palmer-penguins" id="toc-applying-morris-elementary-effects-to-a-real-dataset-the-palmer-penguins" class="nav-link" data-scroll-target="#applying-morris-elementary-effects-to-a-real-dataset-the-palmer-penguins">Applying Morris Elementary Effects to a Real Dataset: The Palmer Penguins</a>
+  <ul class="collapse">
+  <li><a href="#goal" id="toc-goal" class="nav-link" data-scroll-target="#goal">Goal</a></li>
+  <li><a href="#why-this-example-works" id="toc-why-this-example-works" class="nav-link" data-scroll-target="#why-this-example-works">Why this example works</a>
+  <ul class="collapse">
+  <li><a href="#fit-simple-regression-model" id="toc-fit-simple-regression-model" class="nav-link" data-scroll-target="#fit-simple-regression-model">fit simple regression model</a></li>
+  <li><a href="#wrap-fitted-model-as-function" id="toc-wrap-fitted-model-as-function" class="nav-link" data-scroll-target="#wrap-fitted-model-as-function">wrap fitted model as function</a></li>
+  <li><a href="#define-realistic-ranges-for-each-input" id="toc-define-realistic-ranges-for-each-input" class="nav-link" data-scroll-target="#define-realistic-ranges-for-each-input">define realistic ranges for each input</a></li>
+  <li><a href="#interpreting-the-morris-screening-for-penguin-mass" id="toc-interpreting-the-morris-screening-for-penguin-mass" class="nav-link" data-scroll-target="#interpreting-the-morris-screening-for-penguin-mass">Interpreting the Morris screening for penguin mass</a></li>
+  </ul></li>
+  <li><a href="#spatial-sensitivity-analysis-with-synthetic-rasters" id="toc-spatial-sensitivity-analysis-with-synthetic-rasters" class="nav-link" data-scroll-target="#spatial-sensitivity-analysis-with-synthetic-rasters">Spatial Sensitivity Analysis with Synthetic Rasters</a>
+  <ul class="collapse">
+  <li><a href="#step-1.-generate-synthetic-rasters-with-spatial-structure" id="toc-step-1.-generate-synthetic-rasters-with-spatial-structure" class="nav-link" data-scroll-target="#step-1.-generate-synthetic-rasters-with-spatial-structure">Step 1. Generate synthetic rasters with spatial structure</a></li>
+  <li><a href="#step-2.-define-the-transformed-suitability-sub-scores" id="toc-step-2.-define-the-transformed-suitability-sub-scores" class="nav-link" data-scroll-target="#step-2.-define-the-transformed-suitability-sub-scores">Step 2. define the transformed suitability sub-scores</a></li>
+  <li><a href="#step-3.-define-the-suitability-model-with-weights" id="toc-step-3.-define-the-suitability-model-with-weights" class="nav-link" data-scroll-target="#step-3.-define-the-suitability-model-with-weights">Step 3. Define the suitability model with weights</a></li>
+  <li><a href="#step-4.-run-morris-style-elementary-effects-on-the-weights" id="toc-step-4.-run-morris-style-elementary-effects-on-the-weights" class="nav-link" data-scroll-target="#step-4.-run-morris-style-elementary-effects-on-the-weights">Step 4. Run Morris-style elementary effects on the weights</a></li>
+  <li><a href="#step-5.-summarize-mu-and-sigma-for-the-weights" id="toc-step-5.-summarize-mu-and-sigma-for-the-weights" class="nav-link" data-scroll-target="#step-5.-summarize-mu-and-sigma-for-the-weights">Step 5. Summarize <span class="math inline">\(\mu^*\)</span> and <span class="math inline">\(\sigma\)</span> for the weights</a></li>
+  <li><a href="#step-6.-plot-mu-vs-sigma-for-the-spatial-model" id="toc-step-6.-plot-mu-vs-sigma-for-the-spatial-model" class="nav-link" data-scroll-target="#step-6.-plot-mu-vs-sigma-for-the-spatial-model">Step 6. plot <span class="math inline">\(\mu^*\)</span> vs <span class="math inline">\(\sigma\)</span> for the spatial model</a></li>
+  </ul></li>
+  <li><a href="#review-questions" id="toc-review-questions" class="nav-link" data-scroll-target="#review-questions">Review Questions</a>
+  <ul class="collapse">
+  <li><a href="#conceptual" id="toc-conceptual" class="nav-link" data-scroll-target="#conceptual">Conceptual</a></li>
+  <li><a href="#interpretation-2" id="toc-interpretation-2" class="nav-link" data-scroll-target="#interpretation-2">Interpretation</a></li>
+  <li><a href="#answers" id="toc-answers" class="nav-link" data-scroll-target="#answers">Answers</a></li>
+  </ul></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -214,7 +280,13 @@ window.Quarto = {
 
 
 <p>In global sensitivity analysis, the <strong>Morris Method</strong> (also called the <em>Method of Elementary Effects</em>) is a screening technique used to identify which input variables in a model have the greatest influence on the output. It was introduced by Max D. Morris in 1991 as a computationally efficient way to explore sensitivity in models with many inputs, without requiring an enormous number of model runs.</p>
-<p>The basic idea is: - Change one input at a time by a small step, - See how much the output changes, - Repeat this from different starting points across the input space, - Summarize how consistently (or inconsistently) each input causes change.</p>
+<p>The basic idea is:</p>
+<ul>
+<li>Change one input at a time by a small step,</li>
+<li>See how much the output changes,</li>
+<li>Repeat this from different starting points across the input space,</li>
+<li>Summarize how consistently (or inconsistently) each input causes change.</li>
+</ul>
 <p>That small one-at-a-time change in an input and the resulting change in the model output is called an <strong>elementary effect</strong>.</p>
 <hr>
 <section id="why-was-morris-developed" class="level2">
@@ -223,11 +295,11 @@ window.Quarto = {
 <ul>
 <li><p><strong>Local / derivative-based sensitivity</strong>:</p>
 <p>This asks “If I make a tiny change to one parameter around the current baseline, how much does the output change?”<br>
-This is basically a partial derivative.<br>
-Problem: it only tells you about behavior <em>near one point</em> in parameter space, and it assumes smooth / linear behavior.</p></li>
+<em>This is basically a partial derivative.</em></p>
+<p><strong>Problem:</strong> it only tells you about behavior <em>near one point</em> in parameter space, and it assumes smooth / linear behavior.</p></li>
 <li><p><strong>Full global variance-based methods (like Sobol indices)</strong>:</p>
-<p>These methods try to quantify how much of the total output variance is explained by each input and by their interactions.<br>
-They’re extremely informative — but also computationally expensive, because they require a lot of model evaluations.</p></li>
+<p>These methods try to quantify how much of the total output variance is explained by each input and by their interactions.</p>
+<p>They’re extremely informative — but also computationally expensive, because they require a lot of model evaluations.</p></li>
 </ul>
 <p>Max Morris was looking for something in-between:</p>
 <ul>
@@ -371,8 +443,1321 @@ Each path walks through the space one input at a time, changing one variable by 
 <blockquote class="blockquote">
 <p>Now let’s start generating elementary effects for a simple model in Python.</p>
 </blockquote>
+<div id="e7d0969e" class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">## Import libraries and set random seed for repeatability </span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np  </span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt </span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">12</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ol type="1">
+<li>Lets define a sample model</li>
+</ol>
+<p>We want the model to have the following attributes:</p>
+<ul>
+<li>depends on multiple inputs</li>
+<li>is at least a little nonlinear</li>
+<li>has some interactions</li>
+</ul>
+<p><span class="math display">\[
+f(x_1, x_2, x_3) = 2x_1 + 0.5x^2_2 + 3x_1 x_3
+\]</span></p>
+<p>features of this function:</p>
+<ul>
+<li><span class="math inline">\(2x_1\)</span> linear effect of <span class="math inline">\(x_1\)</span></li>
+<li><span class="math inline">\(0.5x^2_2\)</span> nonlinear effect of <span class="math inline">\(x_2\)</span></li>
+<li><span class="math inline">\(3x_1 x_3\)</span> interaction between <span class="math inline">\(x_1\)</span> and <span class="math inline">\(x_3\)</span></li>
+</ul>
+<div id="fc293c0d" class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># function to test for elementary effects</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> model(x1,x2,x3):</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">2</span><span class="op">*</span>x1 <span class="op">+</span> <span class="fl">0.5</span><span class="op">*</span>(x2<span class="op">**</span><span class="dv">2</span>) <span class="op">+</span> <span class="dv">3</span><span class="op">*</span>x1<span class="op">*</span>x3</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ol start="2" type="1">
+<li>Define and measure elementary effects</li>
+</ol>
+<p>For a given input <span class="math inline">\(x_i\)</span> the elementary effect is:</p>
+<p><span class="math display">\[
+EE_i = \frac{f(...,x_i + \Delta,...)-f(...,x_i,...))}{\Delta}
+\]</span></p>
+<p>We will create a function that does the following:</p>
+<ul>
+<li>pick a random starting point <span class="math inline">\((x_i)\)</span> from <span class="math inline">\((x_1,x_2,x_3)\)</span></li>
+<li>nudge just one variable by <span class="math inline">\(\Delta\)</span></li>
+<li>compute the change in output per unit step</li>
+</ul>
+<blockquote class="blockquote">
+<p>notes: 1. we clip the perturbed value so we stay in a valid range [0,1]. 2. we gaurd the denominator in case delta pushes us out and gets clipped to the same value.</p>
+</blockquote>
+<div id="639bc5a9" class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> elementary_effect(model_func, x, i, delta):</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co">    compute the elementary effect of variable i at point x.</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co">    model_func: callable f(x1,x2,x3)</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co">    x: np.array shape (3,) representing [x1,x2,x3]</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co">    i: which index to perturb (0,1,2)</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="co">    delta: step sie to add to x[i]</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="co">    returns: EE_i float</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    x_base <span class="op">=</span> x.copy()</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    x_perturbed <span class="op">=</span> x.copy()</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    x_perturbed[i] <span class="op">=</span> x_perturbed[i] <span class="op">+</span> delta</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>    x_perturbed[i] <span class="op">=</span> np.clip(x_perturbed[i], <span class="dv">0</span>, <span class="dv">1</span>)</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>    y0 <span class="op">=</span> model_func(<span class="op">*</span>x_base)</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>    y1 <span class="op">=</span> model_func(<span class="op">*</span>x_perturbed)</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> (y1 <span class="op">-</span> y0) <span class="op">/</span> (x_perturbed[i] <span class="op">-</span> x_base[i] <span class="op">+</span> <span class="fl">1e-12</span>)</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ol start="3" type="1">
+<li>Sample multiple points in input space and gather EEs</li>
+</ol>
+<p>We will:</p>
+<ul>
+<li>draw random points in [0,1]^3,</li>
+<li>for each point, compute EEs for x1, x2, x3,</li>
+<li>repeat for, say, 50 random points.</li>
+</ul>
+<div id="0b2e1b94" class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> sample_elementary_effects(model_func, n_samples<span class="op">=</span><span class="dv">50</span>, delta<span class="op">=</span><span class="fl">0.1</span>):</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co">    For n_samples random base points in [0,1]^3,</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co">    compute elementary effects for each of the 3 inputs.</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="co">    Returns: DataFrame with columns:</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="co">      ['x1_EE', 'x2_EE', 'x3_EE']</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    records <span class="op">=</span> []</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(n_samples):</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>        <span class="co"># random point in [0,1]^3</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>        x <span class="op">=</span> np.random.rand(<span class="dv">3</span>)</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>        ee_x1 <span class="op">=</span> elementary_effect(model_func, x, i<span class="op">=</span><span class="dv">0</span>, delta<span class="op">=</span>delta)</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>        ee_x2 <span class="op">=</span> elementary_effect(model_func, x, i<span class="op">=</span><span class="dv">1</span>, delta<span class="op">=</span>delta)</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>        ee_x3 <span class="op">=</span> elementary_effect(model_func, x, i<span class="op">=</span><span class="dv">2</span>, delta<span class="op">=</span>delta)</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>        records.append({</span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>            <span class="st">"x1_EE"</span>: ee_x1,</span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>            <span class="st">"x2_EE"</span>: ee_x2,</span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>            <span class="st">"x3_EE"</span>: ee_x3,</span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>        })</span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> pd.DataFrame(records)</span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>ee_df <span class="op">=</span> sample_elementary_effects(model, n_samples<span class="op">=</span><span class="dv">50</span>, delta<span class="op">=</span><span class="fl">0.1</span>)</span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>ee_df.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="4">
+<div>
 
 
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">x1_EE</th>
+<th data-quarto-table-cell-role="th">x2_EE</th>
+<th data-quarto-table-cell-role="th">x3_EE</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>2.789945</td>
+<td>0.790050</td>
+<td>0.462489</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>4.756241</td>
+<td>0.064575</td>
+<td>1.601218</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>4.870848</td>
+<td>0.083421</td>
+<td>2.702145</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>3.818250</td>
+<td>0.333828</td>
+<td>0.411628</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>2.006778</td>
+<td>0.902736</td>
+<td>2.832675</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<ol start="4" type="1">
+<li>Next we compute <span class="math inline">\(\mu^*\)</span> and <span class="math inline">\(\sigma\)</span></li>
+</ol>
+<div id="b0135a0f" class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>summary <span class="op">=</span> pd.DataFrame({</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"mu_star"</span>: [</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>        ee_df[<span class="st">"x1_EE"</span>].<span class="bu">abs</span>().mean(),</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>        ee_df[<span class="st">"x2_EE"</span>].<span class="bu">abs</span>().mean(),</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>        ee_df[<span class="st">"x3_EE"</span>].<span class="bu">abs</span>().mean()</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    ],</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"sigma"</span>: [</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>        ee_df[<span class="st">"x1_EE"</span>].std(ddof<span class="op">=</span><span class="dv">1</span>),</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>        ee_df[<span class="st">"x2_EE"</span>].std(ddof<span class="op">=</span><span class="dv">1</span>),</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>        ee_df[<span class="st">"x3_EE"</span>].std(ddof<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>    ]</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>}, index<span class="op">=</span>[<span class="st">"x1"</span>, <span class="st">"x2"</span>, <span class="st">"x3"</span>])</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>summary</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="5">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">mu_star</th>
+<th data-quarto-table-cell-role="th">sigma</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">x1</td>
+<td>3.378779</td>
+<td>0.940584</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">x2</td>
+<td>0.554154</td>
+<td>0.283397</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">x3</td>
+<td>1.480260</td>
+<td>0.861859</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<ol start="5" type="1">
+<li>plot <span class="math inline">\(\mu^*\)</span> vs <span class="math inline">\(\sigma\)</span></li>
+</ol>
+<div id="36639382" class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">6</span>,<span class="dv">5</span>))</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co"># --- base scatter ---</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>plt.scatter(summary[<span class="st">"mu_star"</span>], summary[<span class="st">"sigma"</span>],</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>            s<span class="op">=</span><span class="dv">100</span>, color<span class="op">=</span><span class="st">"teal"</span>, edgecolor<span class="op">=</span><span class="st">"k"</span>)</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="co"># --- reference lines (mean μ★ and mean σ) ---</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>mu_mean <span class="op">=</span> summary[<span class="st">"mu_star"</span>].mean()</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>sigma_mean <span class="op">=</span> summary[<span class="st">"sigma"</span>].mean()</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>plt.axvline(mu_mean, color<span class="op">=</span><span class="st">"gray"</span>, linestyle<span class="op">=</span><span class="st">"--"</span>, alpha<span class="op">=</span><span class="fl">0.6</span>,</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>            label<span class="op">=</span><span class="ss">f"mean μ* = </span><span class="sc">{</span>mu_mean<span class="sc">:.2f}</span><span class="ss">"</span>)</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>plt.axhline(sigma_mean, color<span class="op">=</span><span class="st">"gray"</span>, linestyle<span class="op">=</span><span class="st">"--"</span>, alpha<span class="op">=</span><span class="fl">0.6</span>,</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>            label<span class="op">=</span><span class="ss">f"mean σ = </span><span class="sc">{</span>sigma_mean<span class="sc">:.2f}</span><span class="ss">"</span>)</span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a><span class="co"># --- labels for each variable ---</span></span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> var_name <span class="kw">in</span> summary.index:</span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>    plt.text(summary.loc[var_name, <span class="st">"mu_star"</span>] <span class="op">+</span> <span class="fl">0.05</span>,</span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>             summary.loc[var_name, <span class="st">"sigma"</span>] <span class="op">+</span> <span class="fl">0.02</span>,</span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>             var_name, fontsize<span class="op">=</span><span class="dv">10</span>)</span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a><span class="co"># --- axes &amp; title ---</span></span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="vs">r"$\mu^*$ (overall influence)"</span>)</span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="vs">r"$\sigma$ (nonlinearity / interaction)"</span>)</span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Morris Elementary Effects – Screening Plot"</span>)</span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a>plt.legend(loc<span class="op">=</span><span class="st">"upper left"</span>, frameon<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a>plt.grid(alpha<span class="op">=</span><span class="fl">0.3</span>)</span>
+<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Morris_Elementary_Effects_files/figure-html/cell-7-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<section id="interpretation" class="level3">
+<h3 class="anchored" data-anchor-id="interpretation">interpretation:</h3>
+<p>The graph shows the following:</p>
+<ul>
+<li><span class="math inline">\(x_2\)</span> has low influence and low interaction</li>
+<li><span class="math inline">\(x_1\)</span> has high interaction and high influence</li>
+<li><span class="math inline">\(x_3\)</span> has high interaction but low influence</li>
+</ul>
+<p>This makes sense looking at our model:</p>
+<p><span class="math display">\[
+f(x_1, x_2, x_3) = 2x_1 + 0.5x^2_2 + 3x_1 x_3
+\]</span></p>
+<p>features of this function:</p>
+<ul>
+<li><span class="math inline">\(2x_1\)</span> linear effect of <span class="math inline">\(x_1\)</span></li>
+<li><span class="math inline">\(0.5x^2_2\)</span> small but nonlinear effect of <span class="math inline">\(x_2\)</span></li>
+<li><span class="math inline">\(3x_1 x_3\)</span> interaction between <span class="math inline">\(x_1\)</span> and <span class="math inline">\(x_3\)</span></li>
+</ul>
+</section>
+</section>
+<section id="applying-morris-elementary-effects-to-a-real-dataset-the-palmer-penguins" class="level1">
+<h1>Applying Morris Elementary Effects to a Real Dataset: The Palmer Penguins</h1>
+<p>To make the concept of <strong>Morris Elementary Effects</strong> more concrete, we’ll apply it to a simple, well-known dataset — the <a href="https://allisonhorst.github.io/palmerpenguins/"><strong>Palmer Penguins</strong></a> dataset.<br>
+This dataset provides morphological measurements for three penguin species (<em>Adelie</em>, <em>Chinstrap</em>, and <em>Gentoo</em>) collected from islands in the Palmer Archipelago, Antarctica.</p>
+<p>It is often used as a modern alternative to the classic <em>Iris</em> dataset because: - It contains a small number of continuous, interpretable features. - The relationships between variables are biologically intuitive (e.g., larger flipper length → heavier penguin). - It contains both linear and nonlinear interactions, which make it a good demonstration dataset for <strong>sensitivity analysis</strong> methods like Morris.</p>
+<hr>
+<section id="goal" class="level2">
+<h2 class="anchored" data-anchor-id="goal">Goal</h2>
+<p>We’ll use the <strong>Morris method</strong> to analyze which morphological features most influence a penguin’s <strong>body mass</strong>.</p>
+<p>Specifically: 1. <strong>Inputs (factors)</strong>:<br>
+- Bill length (mm)<br>
+- Bill depth (mm)<br>
+- Flipper length (mm)<br>
+2. <strong>Output (model response)</strong>:<br>
+- Body mass (g)</p>
+<p>We’ll fit a simple regression model ( f(x_1, x_2, x_3) ) that predicts body mass from these inputs, then treat this model as our “black box.”<br>
+Afterward, we’ll apply the <strong>Morris Elementary Effects method</strong> to quantify: - ( ^* ) → the overall (average) influence of each input, and<br>
+- ( ) → the variability or nonlinearity of that influence across the input space.</p>
+<hr>
+</section>
+<section id="why-this-example-works" class="level2">
+<h2 class="anchored" data-anchor-id="why-this-example-works">Why this example works</h2>
+<ul>
+<li><strong>Interpretability</strong>: It’s easy to reason about which traits should matter (flipper length and bill length should correlate with mass).<br>
+</li>
+<li><strong>Dimensional simplicity</strong>: With only 3 numeric inputs, the results are easy to visualize in 2D (μ★–σ plot).<br>
+</li>
+<li><strong>Interaction potential</strong>: The relationships are not purely linear — for instance, the effect of flipper length might depend on species or bill size.</li>
+</ul>
+<hr>
+<blockquote class="blockquote">
+<p>By working with this dataset, we can see how the Morris method distinguishes between <em>strong, consistent</em> influences (high μ★, low σ) and <em>context-dependent, interacting</em> ones (high μ★, high σ), even in an everyday biological system.</p>
+</blockquote>
+<div id="e5e8c872" class="cell" data-execution_count="24">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Load dataset</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>penguins <span class="op">=</span> sns.load_dataset(<span class="st">"penguins"</span>)</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>penguins.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="24">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">species</th>
+<th data-quarto-table-cell-role="th">island</th>
+<th data-quarto-table-cell-role="th">bill_length_mm</th>
+<th data-quarto-table-cell-role="th">bill_depth_mm</th>
+<th data-quarto-table-cell-role="th">flipper_length_mm</th>
+<th data-quarto-table-cell-role="th">body_mass_g</th>
+<th data-quarto-table-cell-role="th">sex</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>Adelie</td>
+<td>Torgersen</td>
+<td>39.1</td>
+<td>18.7</td>
+<td>181.0</td>
+<td>3750.0</td>
+<td>Male</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>Adelie</td>
+<td>Torgersen</td>
+<td>39.5</td>
+<td>17.4</td>
+<td>186.0</td>
+<td>3800.0</td>
+<td>Female</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>Adelie</td>
+<td>Torgersen</td>
+<td>40.3</td>
+<td>18.0</td>
+<td>195.0</td>
+<td>3250.0</td>
+<td>Female</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>Adelie</td>
+<td>Torgersen</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+<td>NaN</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>Adelie</td>
+<td>Torgersen</td>
+<td>36.7</td>
+<td>19.3</td>
+<td>193.0</td>
+<td>3450.0</td>
+<td>Female</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div id="6080ae43" class="cell" data-execution_count="25">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># keep only columns we need and drop NAs</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>cols <span class="op">=</span> [</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"bill_length_mm"</span>,</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"bill_depth_mm"</span>,</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"flipper_length_mm"</span>,</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"body_mass_g"</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> penguins[cols].dropna().copy()</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>df.head(), df.shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="25">
+<pre><code>(   bill_length_mm  bill_depth_mm  flipper_length_mm  body_mass_g
+ 0            39.1           18.7              181.0       3750.0
+ 1            39.5           17.4              186.0       3800.0
+ 2            40.3           18.0              195.0       3250.0
+ 4            36.7           19.3              193.0       3450.0
+ 5            39.3           20.6              190.0       3650.0,
+ (342, 4))</code></pre>
+</div>
+</div>
+<section id="fit-simple-regression-model" class="level3">
+<h3 class="anchored" data-anchor-id="fit-simple-regression-model">fit simple regression model</h3>
+<p>We’ll use scikit-learns linear regression as our block-box model.</p>
+<p>This gives us <span class="math inline">\(\hat{y} = f(x_1,x_2,x_3)\)</span> that we can later probe with Morris.</p>
+<div id="b0e2b95a" class="cell" data-execution_count="26">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LinearRegression</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> df[[<span class="st">"bill_length_mm"</span>, <span class="st">"bill_depth_mm"</span>, <span class="st">"flipper_length_mm"</span>]]</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> df[<span class="st">"body_mass_g"</span>]</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>X_train, X_test, y_train, y_test <span class="op">=</span> train_test_split(</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>    X, y, test_size<span class="op">=</span><span class="fl">0.2</span>, random_state<span class="op">=</span><span class="dv">0</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> LinearRegression()</span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>model.fit(X_train, y_train)</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"R^2 on train:"</span>, model.score(X_train, y_train))</span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"R^2 on test :"</span>, model.score(X_test, y_test))</span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>model.coef_, model.intercept_</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>R^2 on train: 0.7694159737586672
+R^2 on test : 0.7210757528501677</code></pre>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="26">
+<pre><code>(array([ 7.12002238,  7.65512529, 48.21508216]),
+ np.float64(-5931.683059218843))</code></pre>
+</div>
+</div>
+</section>
+<section id="wrap-fitted-model-as-function" class="level3">
+<h3 class="anchored" data-anchor-id="wrap-fitted-model-as-function">wrap fitted model as function</h3>
+<p>Morris neds a function that takes inputs and returns a scalar output.</p>
+<p>We’ll define a function that:</p>
+<ul>
+<li>accepts three inputs(bill_length, bill_depth, flipper_length),</li>
+<li>packs them into the shape scikit-learn expects</li>
+<li>returns the predicted body mass in grams</li>
+</ul>
+<div id="1f397cea" class="cell" data-execution_count="27">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> penguin_mass_model(bill_length_mm, bill_depth_mm, flipper_length_mm):</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Predict penguin body mass (g) from morphology using our trained linear model.</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="co">    Inputs are scalars.</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="co">    Returns a scalar prediction (grams).</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>    X_input <span class="op">=</span> pd.DataFrame([{</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>        <span class="st">"bill_length_mm"</span>: bill_length_mm,</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>        <span class="st">"bill_depth_mm"</span>: bill_depth_mm,</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>        <span class="st">"flipper_length_mm"</span>: flipper_length_mm</span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>    }])</span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>    y_pred <span class="op">=</span> model.predict(X_input)</span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">float</span>(y_pred[<span class="dv">0</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="define-realistic-ranges-for-each-input" class="level3">
+<h3 class="anchored" data-anchor-id="define-realistic-ranges-for-each-input">define realistic ranges for each input</h3>
+<p>to run morris, we need to tell it what ranges each input can take.</p>
+<p>We’ll base that on the observed min/max in the data</p>
+<div id="fe70d18b" class="cell" data-execution_count="28">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>feature_ranges <span class="op">=</span> {</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"bill_length_mm"</span>: (</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>        df[<span class="st">"bill_length_mm"</span>].<span class="bu">min</span>(),</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>        df[<span class="st">"bill_length_mm"</span>].<span class="bu">max</span>()</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"bill_depth_mm"</span>: (</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>        df[<span class="st">"bill_depth_mm"</span>].<span class="bu">min</span>(),</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>        df[<span class="st">"bill_depth_mm"</span>].<span class="bu">max</span>()</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">"flipper_length_mm"</span>: (</span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>        df[<span class="st">"flipper_length_mm"</span>].<span class="bu">min</span>(),</span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>        df[<span class="st">"flipper_length_mm"</span>].<span class="bu">max</span>()</span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>feature_ranges</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="28">
+<pre><code>{'bill_length_mm': (np.float64(32.1), np.float64(59.6)),
+ 'bill_depth_mm': (np.float64(13.1), np.float64(21.5)),
+ 'flipper_length_mm': (np.float64(172.0), np.float64(231.0))}</code></pre>
+</div>
+</div>
+<div id="5bc43fb0" class="cell" data-execution_count="29">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># --- 1. Define the sampling and EE computation function ---</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> sample_elementary_effects_real_model(model_func, feature_ranges, n_samples<span class="op">=</span><span class="dv">100</span>, delta<span class="op">=</span><span class="fl">0.05</span>):</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="co">    Compute elementary effects for each continuous input variable in the model.</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="co">    </span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="co">    Parameters</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="co">    ----------</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a><span class="co">    model_func : callable</span></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a><span class="co">        A function that takes three inputs (bill_length, bill_depth, flipper_length)</span></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a><span class="co">        and returns a scalar prediction (body mass in g).</span></span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a><span class="co">    feature_ranges : dict</span></span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a><span class="co">        Dictionary mapping feature names to (min, max) tuples.</span></span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a><span class="co">    n_samples : int</span></span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a><span class="co">        Number of random points to sample.</span></span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a><span class="co">    delta : float</span></span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a><span class="co">        Fractional perturbation of each variable (e.g., 0.05 = 5% of its range).</span></span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a>    features <span class="op">=</span> <span class="bu">list</span>(feature_ranges.keys())</span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a>    records <span class="op">=</span> []</span>
+<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(n_samples):</span>
+<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Randomly sample a base point inside the observed feature space</span></span>
+<span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a>        base_point <span class="op">=</span> {}</span>
+<span id="cb16-24"><a href="#cb16-24" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> feat, (low, high) <span class="kw">in</span> feature_ranges.items():</span>
+<span id="cb16-25"><a href="#cb16-25" aria-hidden="true" tabindex="-1"></a>            base_point[feat] <span class="op">=</span> np.random.uniform(low<span class="op">=</span>low <span class="op">+</span> <span class="fl">0.05</span><span class="op">*</span>(high<span class="op">-</span>low), high<span class="op">=</span>high <span class="op">-</span> <span class="fl">0.05</span><span class="op">*</span>(high<span class="op">-</span>low))</span>
+<span id="cb16-26"><a href="#cb16-26" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb16-27"><a href="#cb16-27" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Baseline prediction</span></span>
+<span id="cb16-28"><a href="#cb16-28" aria-hidden="true" tabindex="-1"></a>        y0 <span class="op">=</span> model_func(base_point[features[<span class="dv">0</span>]], base_point[features[<span class="dv">1</span>]], base_point[features[<span class="dv">2</span>]])</span>
+<span id="cb16-29"><a href="#cb16-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-30"><a href="#cb16-30" aria-hidden="true" tabindex="-1"></a>        ee_point <span class="op">=</span> {}</span>
+<span id="cb16-31"><a href="#cb16-31" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> feat <span class="kw">in</span> features:</span>
+<span id="cb16-32"><a href="#cb16-32" aria-hidden="true" tabindex="-1"></a>            low, high <span class="op">=</span> feature_ranges[feat]</span>
+<span id="cb16-33"><a href="#cb16-33" aria-hidden="true" tabindex="-1"></a>            step <span class="op">=</span> delta <span class="op">*</span> (high <span class="op">-</span> low)</span>
+<span id="cb16-34"><a href="#cb16-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-35"><a href="#cb16-35" aria-hidden="true" tabindex="-1"></a>            perturbed_point <span class="op">=</span> base_point.copy()</span>
+<span id="cb16-36"><a href="#cb16-36" aria-hidden="true" tabindex="-1"></a>            perturbed_point[feat] <span class="op">=</span> np.clip(base_point[feat] <span class="op">+</span> step, low, high)</span>
+<span id="cb16-37"><a href="#cb16-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-38"><a href="#cb16-38" aria-hidden="true" tabindex="-1"></a>            y1 <span class="op">=</span> model_func(</span>
+<span id="cb16-39"><a href="#cb16-39" aria-hidden="true" tabindex="-1"></a>                perturbed_point[features[<span class="dv">0</span>]],</span>
+<span id="cb16-40"><a href="#cb16-40" aria-hidden="true" tabindex="-1"></a>                perturbed_point[features[<span class="dv">1</span>]],</span>
+<span id="cb16-41"><a href="#cb16-41" aria-hidden="true" tabindex="-1"></a>                perturbed_point[features[<span class="dv">2</span>]]</span>
+<span id="cb16-42"><a href="#cb16-42" aria-hidden="true" tabindex="-1"></a>            )</span>
+<span id="cb16-43"><a href="#cb16-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-44"><a href="#cb16-44" aria-hidden="true" tabindex="-1"></a>            ee_point[<span class="ss">f"</span><span class="sc">{</span>feat<span class="sc">}</span><span class="ss">_EE"</span>] <span class="op">=</span> (y1 <span class="op">-</span> y0) <span class="op">/</span> step</span>
+<span id="cb16-45"><a href="#cb16-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-46"><a href="#cb16-46" aria-hidden="true" tabindex="-1"></a>        records.append(ee_point)</span>
+<span id="cb16-47"><a href="#cb16-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-48"><a href="#cb16-48" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> pd.DataFrame(records)</span>
+<span id="cb16-49"><a href="#cb16-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-50"><a href="#cb16-50" aria-hidden="true" tabindex="-1"></a><span class="co"># --- 2. Run the sampling ---</span></span>
+<span id="cb16-51"><a href="#cb16-51" aria-hidden="true" tabindex="-1"></a>ee_df <span class="op">=</span> sample_elementary_effects_real_model(</span>
+<span id="cb16-52"><a href="#cb16-52" aria-hidden="true" tabindex="-1"></a>    penguin_mass_model,</span>
+<span id="cb16-53"><a href="#cb16-53" aria-hidden="true" tabindex="-1"></a>    feature_ranges,</span>
+<span id="cb16-54"><a href="#cb16-54" aria-hidden="true" tabindex="-1"></a>    n_samples<span class="op">=</span><span class="dv">100</span>,</span>
+<span id="cb16-55"><a href="#cb16-55" aria-hidden="true" tabindex="-1"></a>    delta<span class="op">=</span><span class="fl">0.05</span></span>
+<span id="cb16-56"><a href="#cb16-56" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb16-57"><a href="#cb16-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-58"><a href="#cb16-58" aria-hidden="true" tabindex="-1"></a>ee_df.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="29">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">bill_length_mm_EE</th>
+<th data-quarto-table-cell-role="th">bill_depth_mm_EE</th>
+<th data-quarto-table-cell-role="th">flipper_length_mm_EE</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>7.120022</td>
+<td>7.655125</td>
+<td>48.215082</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>7.120022</td>
+<td>7.655125</td>
+<td>48.215082</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>7.120022</td>
+<td>7.655125</td>
+<td>48.215082</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>7.120022</td>
+<td>7.655125</td>
+<td>48.215082</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>7.120022</td>
+<td>7.655125</td>
+<td>48.215082</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div id="0900b0c9" class="cell" data-execution_count="30">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>summary <span class="op">=</span> pd.DataFrame({</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"mu_star"</span>: [ee_df[c].<span class="bu">abs</span>().mean() <span class="cf">for</span> c <span class="kw">in</span> ee_df.columns],</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"sigma"</span>: [ee_df[c].std(ddof<span class="op">=</span><span class="dv">1</span>) <span class="cf">for</span> c <span class="kw">in</span> ee_df.columns]</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>}, index<span class="op">=</span>[c.replace(<span class="st">"_EE"</span>, <span class="st">""</span>) <span class="cf">for</span> c <span class="kw">in</span> ee_df.columns])</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>summary</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="30">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">mu_star</th>
+<th data-quarto-table-cell-role="th">sigma</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">bill_length_mm</td>
+<td>7.120022</td>
+<td>6.091025e-13</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">bill_depth_mm</td>
+<td>7.655125</td>
+<td>2.030373e-12</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">flipper_length_mm</td>
+<td>48.215082</td>
+<td>3.332289e-13</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div id="ae3db357" class="cell" data-execution_count="31">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(summary)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>()</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"mu_star stats:"</span>)</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">" min:"</span>, summary[<span class="st">"mu_star"</span>].<span class="bu">min</span>())</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">" max:"</span>, summary[<span class="st">"mu_star"</span>].<span class="bu">max</span>())</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">" mean:"</span>, summary[<span class="st">"mu_star"</span>].mean())</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">sigma stats:"</span>)</span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">" min:"</span>, summary[<span class="st">"sigma"</span>].<span class="bu">min</span>())</span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">" max:"</span>, summary[<span class="st">"sigma"</span>].<span class="bu">max</span>())</span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">" mean:"</span>, summary[<span class="st">"sigma"</span>].mean())</span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">Any NaN in summary?"</span>)</span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(summary.isna().<span class="bu">any</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                     mu_star         sigma
+bill_length_mm      7.120022  6.091025e-13
+bill_depth_mm       7.655125  2.030373e-12
+flipper_length_mm  48.215082  3.332289e-13
+
+mu_star stats:
+ min: 7.120022379018935
+ max: 48.21508215626039
+ mean: 20.996743274284498
+
+sigma stats:
+ min: 3.3322894109700684e-13
+ max: 2.030373237990764e-12
+ mean: 9.909015515269688e-13
+
+Any NaN in summary?
+mu_star    False
+sigma      False
+dtype: bool</code></pre>
+</div>
+</div>
+<div id="62591722" class="cell" data-execution_count="32">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>mu_vals <span class="op">=</span> summary[<span class="st">"mu_star"</span>].values.astype(<span class="bu">float</span>)</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>sigma_vals <span class="op">=</span> summary[<span class="st">"sigma"</span>].values.astype(<span class="bu">float</span>)</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>names <span class="op">=</span> summary.index.tolist()</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>mu_mean <span class="op">=</span> <span class="bu">float</span>(np.mean(mu_vals))</span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>sigma_mean <span class="op">=</span> <span class="bu">float</span>(np.mean(sigma_vals))</span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a><span class="co"># define plotting limits with a small % padding around actual data</span></span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>mu_min <span class="op">=</span> mu_vals.<span class="bu">min</span>()</span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>mu_max <span class="op">=</span> mu_vals.<span class="bu">max</span>()</span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a>sigma_min <span class="op">=</span> sigma_vals.<span class="bu">min</span>()</span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a>sigma_max <span class="op">=</span> sigma_vals.<span class="bu">max</span>()</span>
+<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a>mu_pad <span class="op">=</span> <span class="fl">0.1</span> <span class="op">*</span> (mu_max <span class="op">-</span> mu_min <span class="cf">if</span> mu_max <span class="op">&gt;</span> mu_min <span class="cf">else</span> <span class="fl">1.0</span>)</span>
+<span id="cb20-17"><a href="#cb20-17" aria-hidden="true" tabindex="-1"></a>sigma_pad <span class="op">=</span> <span class="fl">0.1</span> <span class="op">*</span> (sigma_max <span class="op">-</span> sigma_min <span class="cf">if</span> sigma_max <span class="op">&gt;</span> sigma_min <span class="cf">else</span> <span class="fl">1.0</span>)</span>
+<span id="cb20-18"><a href="#cb20-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-19"><a href="#cb20-19" aria-hidden="true" tabindex="-1"></a>x_lo <span class="op">=</span> mu_min <span class="op">-</span> mu_pad</span>
+<span id="cb20-20"><a href="#cb20-20" aria-hidden="true" tabindex="-1"></a>x_hi <span class="op">=</span> mu_max <span class="op">+</span> mu_pad</span>
+<span id="cb20-21"><a href="#cb20-21" aria-hidden="true" tabindex="-1"></a>y_lo <span class="op">=</span> sigma_min <span class="op">-</span> sigma_pad</span>
+<span id="cb20-22"><a href="#cb20-22" aria-hidden="true" tabindex="-1"></a>y_hi <span class="op">=</span> sigma_max <span class="op">+</span> sigma_pad</span>
+<span id="cb20-23"><a href="#cb20-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-24"><a href="#cb20-24" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">6</span>,<span class="dv">5</span>))</span>
+<span id="cb20-25"><a href="#cb20-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-26"><a href="#cb20-26" aria-hidden="true" tabindex="-1"></a><span class="co"># scatter points</span></span>
+<span id="cb20-27"><a href="#cb20-27" aria-hidden="true" tabindex="-1"></a>ax.scatter(mu_vals, sigma_vals,</span>
+<span id="cb20-28"><a href="#cb20-28" aria-hidden="true" tabindex="-1"></a>           s<span class="op">=</span><span class="dv">100</span>, color<span class="op">=</span><span class="st">"teal"</span>, edgecolor<span class="op">=</span><span class="st">"k"</span>, zorder<span class="op">=</span><span class="dv">3</span>)</span>
+<span id="cb20-29"><a href="#cb20-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-30"><a href="#cb20-30" aria-hidden="true" tabindex="-1"></a><span class="co"># adaptive label offset: 2% of axis span instead of hardcoded 0.02</span></span>
+<span id="cb20-31"><a href="#cb20-31" aria-hidden="true" tabindex="-1"></a>x_offset <span class="op">=</span> <span class="fl">0.02</span> <span class="op">*</span> (x_hi <span class="op">-</span> x_lo)</span>
+<span id="cb20-32"><a href="#cb20-32" aria-hidden="true" tabindex="-1"></a>y_offset <span class="op">=</span> <span class="fl">0.02</span> <span class="op">*</span> (y_hi <span class="op">-</span> y_lo)</span>
+<span id="cb20-33"><a href="#cb20-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-34"><a href="#cb20-34" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> x, y, label <span class="kw">in</span> <span class="bu">zip</span>(mu_vals, sigma_vals, names):</span>
+<span id="cb20-35"><a href="#cb20-35" aria-hidden="true" tabindex="-1"></a>    ax.text(x <span class="op">+</span> x_offset, y <span class="op">+</span> y_offset, label,</span>
+<span id="cb20-36"><a href="#cb20-36" aria-hidden="true" tabindex="-1"></a>            fontsize<span class="op">=</span><span class="dv">10</span>, zorder<span class="op">=</span><span class="dv">4</span>)</span>
+<span id="cb20-37"><a href="#cb20-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-38"><a href="#cb20-38" aria-hidden="true" tabindex="-1"></a><span class="co"># reference lines</span></span>
+<span id="cb20-39"><a href="#cb20-39" aria-hidden="true" tabindex="-1"></a>ax.axvline(mu_mean, color<span class="op">=</span><span class="st">"gray"</span>, linestyle<span class="op">=</span><span class="st">"--"</span>, alpha<span class="op">=</span><span class="fl">0.6</span>,</span>
+<span id="cb20-40"><a href="#cb20-40" aria-hidden="true" tabindex="-1"></a>           label<span class="op">=</span><span class="ss">f"mean μ* = </span><span class="sc">{</span>mu_mean<span class="sc">:.2f}</span><span class="ss">"</span>)</span>
+<span id="cb20-41"><a href="#cb20-41" aria-hidden="true" tabindex="-1"></a>ax.axhline(sigma_mean, color<span class="op">=</span><span class="st">"gray"</span>, linestyle<span class="op">=</span><span class="st">"--"</span>, alpha<span class="op">=</span><span class="fl">0.6</span>,</span>
+<span id="cb20-42"><a href="#cb20-42" aria-hidden="true" tabindex="-1"></a>           label<span class="op">=</span><span class="ss">f"mean σ = </span><span class="sc">{</span>sigma_mean<span class="sc">:.2e}</span><span class="ss">"</span>)</span>
+<span id="cb20-43"><a href="#cb20-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-44"><a href="#cb20-44" aria-hidden="true" tabindex="-1"></a><span class="co"># set sane limits</span></span>
+<span id="cb20-45"><a href="#cb20-45" aria-hidden="true" tabindex="-1"></a>ax.set_xlim(x_lo, x_hi)</span>
+<span id="cb20-46"><a href="#cb20-46" aria-hidden="true" tabindex="-1"></a>ax.set_ylim(y_lo, y_hi)</span>
+<span id="cb20-47"><a href="#cb20-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-48"><a href="#cb20-48" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">"μ* (overall influence on predicted mass)"</span>)</span>
+<span id="cb20-49"><a href="#cb20-49" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">"σ (interaction / nonlinearity)"</span>)</span>
+<span id="cb20-50"><a href="#cb20-50" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">"Morris Sensitivity Screening — Penguin Body Mass Model"</span>)</span>
+<span id="cb20-51"><a href="#cb20-51" aria-hidden="true" tabindex="-1"></a>ax.grid(alpha<span class="op">=</span><span class="fl">0.3</span>)</span>
+<span id="cb20-52"><a href="#cb20-52" aria-hidden="true" tabindex="-1"></a>ax.legend(loc<span class="op">=</span><span class="st">"upper right"</span>, frameon<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb20-53"><a href="#cb20-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-54"><a href="#cb20-54" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Morris_Elementary_Effects_files/figure-html/cell-16-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="interpreting-the-morris-screening-for-penguin-mass" class="level3">
+<h3 class="anchored" data-anchor-id="interpreting-the-morris-screening-for-penguin-mass">Interpreting the Morris screening for penguin mass</h3>
+<p>We used a linear regression model to predict penguin body mass (g) from bill length, bill depth, and flipper length. We then applied the Morris Elementary Effects method to measure how sensitive the predicted mass is to each morphological input.</p>
+<p>Results: - <code>flipper_length_mm</code> has the highest μ<em>, meaning it is the most influential predictor of body mass overall. Small changes in flipper length lead to large changes in predicted body mass. - <code>bill_length_mm</code> and <code>bill_depth_mm</code> also affect predicted mass, but less strongly (their μ</em> values are much smaller than flipper length). - All three inputs have σ values that are ~0. This means the effect of each input is essentially constant across the range of values we sampled. In other words, the model’s response to each input is linear and does not depend much on the other inputs.</p>
+<p>This is exactly what we’d expect from a plain linear regression with no interaction terms: each predictor contributes additively and with a roughly constant slope. Because σ is near zero, we see no evidence of strong interactions or nonlinear behavior in this model.</p>
+<p>In a more complex ecological model (or in a spatial MCDA with nonlinear suitability thresholds), we would expect to see higher σ, which would indicate that certain inputs matter only under certain conditions or in combination with other inputs.</p>
+</section>
+</section>
+<section id="spatial-sensitivity-analysis-with-synthetic-rasters" class="level2">
+<h2 class="anchored" data-anchor-id="spatial-sensitivity-analysis-with-synthetic-rasters">Spatial Sensitivity Analysis with Synthetic Rasters</h2>
+<p>Now that we understand how Morris’ <em>elementary effects</em> method works conceptually, let’s explore how it applies in a <strong>spatial MCDA (Multi-Criteria Decision Analysis)</strong> setting — the kind used in suitability or recharge mapping.</p>
+<p>In a spatial context, our “model” is often a <strong>weighted linear combination (WLC)</strong> of several raster criteria:</p>
+<ul>
+<li>slope</li>
+<li>soil permeability</li>
+<li>rainfall</li>
+<li>land cover, etc.</li>
+</ul>
+<p>Each criterion is spatially continuous, and we assign <strong>weights</strong> to express their relative importance. The Morris method lets us vary these weights systematically to see:</p>
+<ul>
+<li>which weights most strongly influence the overall suitability outcome (μ★), and</li>
+<li>which weights interact in nonlinear ways (σ &gt; 0).</li>
+</ul>
+<p>To demonstrate this, we’ll create a <strong>synthetic dataset of rasters</strong> that mimics realistic environmental layers and intentionally includes <strong>nonlinearity and interactions</strong>.</p>
+<p>Our synthetic study area will include:</p>
+<ul>
+<li><code>slope</code> — higher toward one corner (representing uplands),</li>
+<li><code>permeability</code> — highest in a central “valley,”</li>
+<li><code>rainfall</code> — decreasing west to east, with sinusoidal north–south variability.</li>
+</ul>
+<p>We’ll then define four “factors” that influence a hypothetical <strong>recharge suitability score</strong>:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 9%">
+<col style="width: 34%">
+<col style="width: 56%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Symbol</th>
+<th style="text-align: left;">Description</th>
+<th style="text-align: left;">Behavior</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><em>wₛₗₒₚₑ</em></td>
+<td style="text-align: left;">Weight on slope suitability</td>
+<td style="text-align: left;">favors gentle slopes (nonlinear decay)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><em>wₚₑᵣₘ</em></td>
+<td style="text-align: left;">Weight on soil permeability</td>
+<td style="text-align: left;">roughly linear (more permeable → better)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><em>wᵣₐᵢₙ</em></td>
+<td style="text-align: left;">Weight on rainfall suitability</td>
+<td style="text-align: left;">“Goldilocks” response — midrange rainfall best</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><em>wᵢₙₜ</em></td>
+<td style="text-align: left;">Weight on interaction term</td>
+<td style="text-align: left;">captures synergy between rainfall and permeability</td>
+</tr>
+</tbody>
+</table>
+<p>We’ll define a composite suitability model:</p>
+<p><span class="math display">\[
+\text{Suitability}(i,j) =
+w_\text{slope},f_\text{slope}(s_{ij}) +
+w_\text{perm},f_\text{perm}(p_{ij}) +
+w_\text{rain},f_\text{rain}(r_{ij}) +
+w_\text{int},f_\text{int}(p_{ij}, r_{ij})
+\]</span></p>
+<p>Then we’ll summarize each run by a single management-style indicator:</p>
+<blockquote class="blockquote">
+<p><strong>% of the landscape with suitability ≥ 0.7</strong></p>
+</blockquote>
+<p>Finally, we’ll apply the <strong>Morris elementary-effects</strong> method to the weights <span class="math inline">\(((w_\text{slope}, w_\text{perm}, w_\text{rain}, w_\text{int}))\)</span> to estimate μ★ and σ — showing which weights matter most and which behave nonlinearly or interactively.</p>
+<hr>
+<section id="step-1.-generate-synthetic-rasters-with-spatial-structure" class="level3">
+<h3 class="anchored" data-anchor-id="step-1.-generate-synthetic-rasters-with-spatial-structure">Step 1. Generate synthetic rasters with spatial structure</h3>
+<p>What we will do:</p>
+<p>slope: increases toward one corner (like uplands vs basin floor).</p>
+<p>perm: hotspot of high permeability (like an alluvial fan or paleo-channel).</p>
+<p>rain: west-to-east gradient plus a sinusoidal north-south climate band.</p>
+<div id="86f33b0c" class="cell" data-execution_count="34">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">42</span>)</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="co"># grid size</span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>nx, ny <span class="op">=</span> <span class="dv">50</span>, <span class="dv">50</span></span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a><span class="co"># create coordinate grids (to allow gradients across space)</span></span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.linspace(<span class="dv">0</span>, <span class="dv">1</span>, nx)</span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> np.linspace(<span class="dv">0</span>, <span class="dv">1</span>, ny)</span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>X, Y <span class="op">=</span> np.meshgrid(x, y, indexing<span class="op">=</span><span class="st">"ij"</span>)  <span class="co"># X[i,j], Y[i,j] in [0,1]</span></span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a><span class="co"># synthetic "slope": higher slope in the NE corner + noise</span></span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a>slope <span class="op">=</span> <span class="dv">30</span> <span class="op">*</span> (<span class="fl">0.3</span><span class="op">*</span>X <span class="op">+</span> <span class="fl">0.7</span><span class="op">*</span>Y) <span class="op">+</span> np.random.normal(<span class="dv">0</span>, <span class="dv">2</span>, (nx, ny))</span>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a>slope <span class="op">=</span> np.clip(slope, <span class="dv">0</span>, <span class="dv">30</span>)  <span class="co"># degrees</span></span>
+<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a><span class="co"># synthetic "soil permeability" (perm): better in valley-like band</span></span>
+<span id="cb21-17"><a href="#cb21-17" aria-hidden="true" tabindex="-1"></a>perm <span class="op">=</span> <span class="fl">0.6</span> <span class="op">+</span> <span class="fl">0.4</span><span class="op">*</span>np.exp(<span class="op">-</span>((X<span class="op">-</span><span class="fl">0.5</span>)<span class="op">**</span><span class="dv">2</span> <span class="op">+</span> (Y<span class="op">-</span><span class="fl">0.2</span>)<span class="op">**</span><span class="dv">2</span>)<span class="op">/</span><span class="fl">0.05</span>)</span>
+<span id="cb21-18"><a href="#cb21-18" aria-hidden="true" tabindex="-1"></a>perm <span class="op">+=</span> np.random.normal(<span class="dv">0</span>, <span class="fl">0.05</span>, (nx, ny))</span>
+<span id="cb21-19"><a href="#cb21-19" aria-hidden="true" tabindex="-1"></a>perm <span class="op">=</span> np.clip(perm, <span class="dv">0</span>, <span class="dv">1</span>)</span>
+<span id="cb21-20"><a href="#cb21-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-21"><a href="#cb21-21" aria-hidden="true" tabindex="-1"></a><span class="co"># synthetic "rainfall": gradient + hump</span></span>
+<span id="cb21-22"><a href="#cb21-22" aria-hidden="true" tabindex="-1"></a>rain <span class="op">=</span> <span class="dv">200</span> <span class="op">+</span> <span class="dv">600</span><span class="op">*</span>(<span class="dv">1</span> <span class="op">-</span> X) <span class="op">+</span> <span class="dv">80</span><span class="op">*</span>np.sin(<span class="dv">3</span><span class="op">*</span>np.pi<span class="op">*</span>Y)</span>
+<span id="cb21-23"><a href="#cb21-23" aria-hidden="true" tabindex="-1"></a>rain <span class="op">+=</span> np.random.normal(<span class="dv">0</span>, <span class="dv">20</span>, (nx, ny))</span>
+<span id="cb21-24"><a href="#cb21-24" aria-hidden="true" tabindex="-1"></a>rain <span class="op">=</span> np.clip(rain, <span class="dv">200</span>, <span class="dv">800</span>)  <span class="co"># mm/yr</span></span>
+<span id="cb21-25"><a href="#cb21-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-26"><a href="#cb21-26" aria-hidden="true" tabindex="-1"></a>slope.shape, perm.shape, rain.shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="34">
+<pre><code>((50, 50), (50, 50), (50, 50))</code></pre>
+</div>
+</div>
+</section>
+<section id="step-2.-define-the-transformed-suitability-sub-scores" class="level3">
+<h3 class="anchored" data-anchor-id="step-2.-define-the-transformed-suitability-sub-scores">Step 2. define the transformed suitability sub-scores</h3>
+<p>Now we define the <span class="math inline">\(f_{slope}, f_{perm}, f_{rain}\)</span>, and the interaction term.</p>
+<p>Design choices:</p>
+<ul>
+<li>We want nonlinearity: e.g.&nbsp;very steep slopes get penalized sharply.</li>
+<li>We want “Goldilocks” rainfall: mid-range rain gives best recharge; too little = no water, too much = maybe runoff.</li>
+<li>We want interaction between perm and rain: rain only helps if perm is high.</li>
+</ul>
+<div id="6a0c0c3a" class="cell" data-execution_count="35">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> score_slope(slope_grid):</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># high score for gentle slopes, decays nonlinearly</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># slope in degrees 0..30</span></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>    <span class="co"># we'll do an exponential decay so it's strongly nonlinear</span></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.exp(<span class="op">-</span>slope_grid <span class="op">/</span> <span class="fl">10.0</span>)  <span class="co"># near 1 at 0 deg, ~exp(-3)=0.05 at 30 deg</span></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> score_perm(perm_grid):</span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>    <span class="co"># more permeable is better, roughly linear</span></span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>    <span class="co"># perm already in [0,1]</span></span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> perm_grid  <span class="co"># identity for now</span></span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> score_rain(rain_grid):</span>
+<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a>    <span class="co"># peak around moderate rainfall (e.g. 500 mm),</span></span>
+<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a>    <span class="co"># penalize too dry or too wet via a Gaussian-like curve</span></span>
+<span id="cb23-15"><a href="#cb23-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.exp(<span class="op">-</span>((rain_grid <span class="op">-</span> <span class="fl">500.0</span>)<span class="op">**</span><span class="dv">2</span>) <span class="op">/</span> (<span class="dv">2</span><span class="op">*</span>(<span class="fl">100.0</span><span class="op">**</span><span class="dv">2</span>)))</span>
+<span id="cb23-16"><a href="#cb23-16" aria-hidden="true" tabindex="-1"></a>    <span class="co"># ~1.0 at 500 mm, drops off as you move away</span></span>
+<span id="cb23-17"><a href="#cb23-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-18"><a href="#cb23-18" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> score_interaction(perm_grid, rain_grid):</span>
+<span id="cb23-19"><a href="#cb23-19" aria-hidden="true" tabindex="-1"></a>    <span class="co"># interaction: rain only "counts" if perm is high</span></span>
+<span id="cb23-20"><a href="#cb23-20" aria-hidden="true" tabindex="-1"></a>    <span class="co"># e.g. multiply them, so high perm + decent rain is very good</span></span>
+<span id="cb23-21"><a href="#cb23-21" aria-hidden="true" tabindex="-1"></a>    <span class="co"># but high rain with low perm won't help</span></span>
+<span id="cb23-22"><a href="#cb23-22" aria-hidden="true" tabindex="-1"></a>    rain_norm <span class="op">=</span> (rain_grid <span class="op">-</span> <span class="fl">200.0</span>) <span class="op">/</span> (<span class="fl">800.0</span> <span class="op">-</span> <span class="fl">200.0</span>)  <span class="co"># scale rain to [0,1]</span></span>
+<span id="cb23-23"><a href="#cb23-23" aria-hidden="true" tabindex="-1"></a>    rain_norm <span class="op">=</span> np.clip(rain_norm, <span class="dv">0</span>, <span class="dv">1</span>)</span>
+<span id="cb23-24"><a href="#cb23-24" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> perm_grid <span class="op">*</span> rain_norm</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="step-3.-define-the-suitability-model-with-weights" class="level3">
+<h3 class="anchored" data-anchor-id="step-3.-define-the-suitability-model-with-weights">Step 3. Define the suitability model with weights</h3>
+<p>we will treat the weights as the “inputs” then we will perturb them with Morris, these are like decision-maker priorities in a WLC</p>
+<div id="6ef1770a" class="cell" data-execution_count="36">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> suitability_from_weights(w_slope, w_perm, w_rain, w_int):</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Given a set of weights, compute a final suitability raster,</span></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a><span class="co">    then return a management-style scalar metric:</span></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a><span class="co">    % of the landscape above a suitability threshold.</span></span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>    S_slope <span class="op">=</span> score_slope(slope)</span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>    S_perm  <span class="op">=</span> score_perm(perm)</span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>    S_rain  <span class="op">=</span> score_rain(rain)</span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>    S_int   <span class="op">=</span> score_interaction(perm, rain)</span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>    <span class="co"># weighted linear combo including interaction layer</span></span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a>    suitability <span class="op">=</span> (</span>
+<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a>        w_slope <span class="op">*</span> S_slope <span class="op">+</span></span>
+<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a>        w_perm  <span class="op">*</span> S_perm  <span class="op">+</span></span>
+<span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a>        w_rain  <span class="op">*</span> S_rain  <span class="op">+</span></span>
+<span id="cb24-17"><a href="#cb24-17" aria-hidden="true" tabindex="-1"></a>        w_int   <span class="op">*</span> S_int</span>
+<span id="cb24-18"><a href="#cb24-18" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb24-19"><a href="#cb24-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-20"><a href="#cb24-20" aria-hidden="true" tabindex="-1"></a>    <span class="co"># normalize by sum of weights so scores stay in a comparable range</span></span>
+<span id="cb24-21"><a href="#cb24-21" aria-hidden="true" tabindex="-1"></a>    w_sum <span class="op">=</span> (w_slope <span class="op">+</span> w_perm <span class="op">+</span> w_rain <span class="op">+</span> w_int) <span class="op">+</span> <span class="fl">1e-12</span></span>
+<span id="cb24-22"><a href="#cb24-22" aria-hidden="true" tabindex="-1"></a>    suitability <span class="op">=</span> suitability <span class="op">/</span> w_sum</span>
+<span id="cb24-23"><a href="#cb24-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-24"><a href="#cb24-24" aria-hidden="true" tabindex="-1"></a>    <span class="co"># management-style scalar output:</span></span>
+<span id="cb24-25"><a href="#cb24-25" aria-hidden="true" tabindex="-1"></a>    <span class="co"># fraction of cells with suitability &gt;= 0.7</span></span>
+<span id="cb24-26"><a href="#cb24-26" aria-hidden="true" tabindex="-1"></a>    high_priority <span class="op">=</span> (suitability <span class="op">&gt;=</span> <span class="fl">0.7</span>).mean()  <span class="co"># this is a single number between 0 and 1</span></span>
+<span id="cb24-27"><a href="#cb24-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-28"><a href="#cb24-28" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">float</span>(high_priority)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="step-4.-run-morris-style-elementary-effects-on-the-weights" class="level3">
+<h3 class="anchored" data-anchor-id="step-4.-run-morris-style-elementary-effects-on-the-weights">Step 4. Run Morris-style elementary effects on the weights</h3>
+<p>This is almost identical to what we did with penguins, but now:</p>
+<ul>
+<li>We’re sampling weights instead of morphology.</li>
+<li>We’re perturbing one weight at a time.</li>
+<li>We’ll say each weight varies in [0.1, 1.0] — like minimum importance to strong importance — and we’ll use a fractional step.</li>
+</ul>
+<div id="f4381bd2" class="cell" data-execution_count="37">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>weight_ranges <span class="op">=</span> {</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"w_slope"</span>: (<span class="fl">0.1</span>, <span class="fl">1.0</span>),</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"w_perm"</span>:  (<span class="fl">0.1</span>, <span class="fl">1.0</span>),</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"w_rain"</span>:  (<span class="fl">0.1</span>, <span class="fl">1.0</span>),</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"w_int"</span>:   (<span class="fl">0.1</span>, <span class="fl">1.0</span>),</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> sample_elementary_effects_wlc(model_func, weight_ranges, n_samples<span class="op">=</span><span class="dv">100</span>, delta<span class="op">=</span><span class="fl">0.1</span>):</span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a><span class="co">    model_func: suitability_from_weights</span></span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a><span class="co">    weight_ranges: dict of {weight_name: (min,max)}</span></span>
+<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a><span class="co">    n_samples: number of random base weight sets to test</span></span>
+<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a><span class="co">    delta: step as a fraction of that weight's range</span></span>
+<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a>    wnames <span class="op">=</span> <span class="bu">list</span>(weight_ranges.keys())</span>
+<span id="cb25-16"><a href="#cb25-16" aria-hidden="true" tabindex="-1"></a>    records <span class="op">=</span> []</span>
+<span id="cb25-17"><a href="#cb25-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-18"><a href="#cb25-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(n_samples):</span>
+<span id="cb25-19"><a href="#cb25-19" aria-hidden="true" tabindex="-1"></a>        <span class="co"># pick a random baseline weight set, not at the extreme edges</span></span>
+<span id="cb25-20"><a href="#cb25-20" aria-hidden="true" tabindex="-1"></a>        base_w <span class="op">=</span> {}</span>
+<span id="cb25-21"><a href="#cb25-21" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> wname, (lo, hi) <span class="kw">in</span> weight_ranges.items():</span>
+<span id="cb25-22"><a href="#cb25-22" aria-hidden="true" tabindex="-1"></a>            base_w[wname] <span class="op">=</span> np.random.uniform(</span>
+<span id="cb25-23"><a href="#cb25-23" aria-hidden="true" tabindex="-1"></a>                lo <span class="op">+</span> <span class="fl">0.1</span><span class="op">*</span>(hi<span class="op">-</span>lo),</span>
+<span id="cb25-24"><a href="#cb25-24" aria-hidden="true" tabindex="-1"></a>                hi <span class="op">-</span> <span class="fl">0.1</span><span class="op">*</span>(hi<span class="op">-</span>lo)</span>
+<span id="cb25-25"><a href="#cb25-25" aria-hidden="true" tabindex="-1"></a>            )</span>
+<span id="cb25-26"><a href="#cb25-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-27"><a href="#cb25-27" aria-hidden="true" tabindex="-1"></a>        <span class="co"># baseline model output</span></span>
+<span id="cb25-28"><a href="#cb25-28" aria-hidden="true" tabindex="-1"></a>        y0 <span class="op">=</span> model_func(</span>
+<span id="cb25-29"><a href="#cb25-29" aria-hidden="true" tabindex="-1"></a>            base_w[<span class="st">"w_slope"</span>],</span>
+<span id="cb25-30"><a href="#cb25-30" aria-hidden="true" tabindex="-1"></a>            base_w[<span class="st">"w_perm"</span>],</span>
+<span id="cb25-31"><a href="#cb25-31" aria-hidden="true" tabindex="-1"></a>            base_w[<span class="st">"w_rain"</span>],</span>
+<span id="cb25-32"><a href="#cb25-32" aria-hidden="true" tabindex="-1"></a>            base_w[<span class="st">"w_int"</span>]</span>
+<span id="cb25-33"><a href="#cb25-33" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb25-34"><a href="#cb25-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-35"><a href="#cb25-35" aria-hidden="true" tabindex="-1"></a>        ee_point <span class="op">=</span> {}</span>
+<span id="cb25-36"><a href="#cb25-36" aria-hidden="true" tabindex="-1"></a>        <span class="co"># perturb each weight in turn</span></span>
+<span id="cb25-37"><a href="#cb25-37" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> wname, (lo, hi) <span class="kw">in</span> weight_ranges.items():</span>
+<span id="cb25-38"><a href="#cb25-38" aria-hidden="true" tabindex="-1"></a>            step <span class="op">=</span> delta <span class="op">*</span> (hi <span class="op">-</span> lo)</span>
+<span id="cb25-39"><a href="#cb25-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-40"><a href="#cb25-40" aria-hidden="true" tabindex="-1"></a>            perturbed_w <span class="op">=</span> base_w.copy()</span>
+<span id="cb25-41"><a href="#cb25-41" aria-hidden="true" tabindex="-1"></a>            perturbed_w[wname] <span class="op">=</span> np.clip(base_w[wname] <span class="op">+</span> step, lo, hi)</span>
+<span id="cb25-42"><a href="#cb25-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-43"><a href="#cb25-43" aria-hidden="true" tabindex="-1"></a>            y1 <span class="op">=</span> model_func(</span>
+<span id="cb25-44"><a href="#cb25-44" aria-hidden="true" tabindex="-1"></a>                perturbed_w[<span class="st">"w_slope"</span>],</span>
+<span id="cb25-45"><a href="#cb25-45" aria-hidden="true" tabindex="-1"></a>                perturbed_w[<span class="st">"w_perm"</span>],</span>
+<span id="cb25-46"><a href="#cb25-46" aria-hidden="true" tabindex="-1"></a>                perturbed_w[<span class="st">"w_rain"</span>],</span>
+<span id="cb25-47"><a href="#cb25-47" aria-hidden="true" tabindex="-1"></a>                perturbed_w[<span class="st">"w_int"</span>]</span>
+<span id="cb25-48"><a href="#cb25-48" aria-hidden="true" tabindex="-1"></a>            )</span>
+<span id="cb25-49"><a href="#cb25-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-50"><a href="#cb25-50" aria-hidden="true" tabindex="-1"></a>            <span class="co"># elementary effect for this weight</span></span>
+<span id="cb25-51"><a href="#cb25-51" aria-hidden="true" tabindex="-1"></a>            denom <span class="op">=</span> step <span class="cf">if</span> step <span class="op">&gt;</span> <span class="fl">1e-12</span> <span class="cf">else</span> <span class="fl">1e-12</span></span>
+<span id="cb25-52"><a href="#cb25-52" aria-hidden="true" tabindex="-1"></a>            ee_point[<span class="ss">f"</span><span class="sc">{</span>wname<span class="sc">}</span><span class="ss">_EE"</span>] <span class="op">=</span> (y1 <span class="op">-</span> y0) <span class="op">/</span> denom</span>
+<span id="cb25-53"><a href="#cb25-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-54"><a href="#cb25-54" aria-hidden="true" tabindex="-1"></a>        records.append(ee_point)</span>
+<span id="cb25-55"><a href="#cb25-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-56"><a href="#cb25-56" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> pd.DataFrame(records)</span>
+<span id="cb25-57"><a href="#cb25-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-58"><a href="#cb25-58" aria-hidden="true" tabindex="-1"></a>ee_wlc_df <span class="op">=</span> sample_elementary_effects_wlc(</span>
+<span id="cb25-59"><a href="#cb25-59" aria-hidden="true" tabindex="-1"></a>    suitability_from_weights,</span>
+<span id="cb25-60"><a href="#cb25-60" aria-hidden="true" tabindex="-1"></a>    weight_ranges,</span>
+<span id="cb25-61"><a href="#cb25-61" aria-hidden="true" tabindex="-1"></a>    n_samples<span class="op">=</span><span class="dv">100</span>,</span>
+<span id="cb25-62"><a href="#cb25-62" aria-hidden="true" tabindex="-1"></a>    delta<span class="op">=</span><span class="fl">0.1</span></span>
+<span id="cb25-63"><a href="#cb25-63" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb25-64"><a href="#cb25-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-65"><a href="#cb25-65" aria-hidden="true" tabindex="-1"></a>ee_wlc_df.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="37">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">w_slope_EE</th>
+<th data-quarto-table-cell-role="th">w_perm_EE</th>
+<th data-quarto-table-cell-role="th">w_rain_EE</th>
+<th data-quarto-table-cell-role="th">w_int_EE</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>0.008889</td>
+<td>0.013333</td>
+<td>0.013333</td>
+<td>-0.017778</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>-0.106667</td>
+<td>0.066667</td>
+<td>0.044444</td>
+<td>-0.053333</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>-0.137778</td>
+<td>0.075556</td>
+<td>0.080000</td>
+<td>-0.111111</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>0.000000</td>
+<td>0.044444</td>
+<td>0.008889</td>
+<td>-0.008889</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>-0.004444</td>
+<td>0.026667</td>
+<td>0.031111</td>
+<td>-0.022222</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<blockquote class="blockquote">
+<p>Now we have:</p>
+<ul>
+<li>Each row = one baseline weighting scenario.</li>
+<li>Each column = how sensitive the “% high-priority land” is to each weight at that baseline.</li>
+<li>This is a spatial decision model, with real interactions baked in (w_int affects that interaction layer we defined).</li>
+</ul>
+</blockquote>
+</section>
+<section id="step-5.-summarize-mu-and-sigma-for-the-weights" class="level3">
+<h3 class="anchored" data-anchor-id="step-5.-summarize-mu-and-sigma-for-the-weights">Step 5. Summarize <span class="math inline">\(\mu^*\)</span> and <span class="math inline">\(\sigma\)</span> for the weights</h3>
+<div id="25e5126b" class="cell" data-execution_count="38">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>summary_wlc <span class="op">=</span> pd.DataFrame({</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"mu_star"</span>: [ee_wlc_df[c].<span class="bu">abs</span>().mean() <span class="cf">for</span> c <span class="kw">in</span> ee_wlc_df.columns],</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"sigma"</span>:   [ee_wlc_df[c].std(ddof<span class="op">=</span><span class="dv">1</span>)  <span class="cf">for</span> c <span class="kw">in</span> ee_wlc_df.columns],</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>}, index<span class="op">=</span>[c.replace(<span class="st">"_EE"</span>, <span class="st">""</span>) <span class="cf">for</span> c <span class="kw">in</span> ee_wlc_df.columns])</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>summary_wlc</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="38">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">mu_star</th>
+<th data-quarto-table-cell-role="th">sigma</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">w_slope</td>
+<td>0.059733</td>
+<td>0.048370</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">w_perm</td>
+<td>0.053911</td>
+<td>0.026679</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">w_rain</td>
+<td>0.047244</td>
+<td>0.035660</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">w_int</td>
+<td>0.053956</td>
+<td>0.034369</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<section id="practice-questions" class="level4">
+<h4 class="anchored" data-anchor-id="practice-questions">Practice questions</h4>
+<ol type="1">
+<li>Which weight most strongly controls (<span class="math inline">\(\mu^*\)</span>) how much of the map is deemed suitable or good (gte 7)?</li>
+</ol>
+<blockquote class="blockquote">
+<p><em>answer: w_slope has the highest <span class="math inline">\(\mu^*\)</span> or overall effect.</em></p>
+</blockquote>
+<ol start="2" type="1">
+<li>Which weight’s effect is stable vs.&nbsp;only matters in some regimes?</li>
+</ol>
+<blockquote class="blockquote">
+<p><em>answer:The weight whose effect is most stable (low variability) is <strong>w_perm</strong>, since it has the smallest <span class="math inline">\(\sigma\)</span> value (0.0267). This means its influence on suitability is consistent across different weighting combinations, while <strong>w_slope</strong> shows more variability and context dependence.</em></p>
+</blockquote>
+<ol start="3" type="1">
+<li>Does the interaction weight (w_int) have a high <span class="math inline">\(\sigma\)</span>? <em>(it should because we designed it to matter more when both permeability and rain are favorable)</em></li>
+</ol>
+<blockquote class="blockquote">
+<p><em>answer:The interaction weight <strong>w_int</strong> does <strong>not</strong> have the highest <span class="math inline">\(\sigma\)</span> in this run (its value, 0.0344, is moderate), but it still shows some variability. This suggests it behaves somewhat nonlinearly — its effect depends on permeability and rainfall conditions — though not as strongly as expected in this specific simulation.</em></p>
+</blockquote>
+</section>
+</section>
+<section id="step-6.-plot-mu-vs-sigma-for-the-spatial-model" class="level3">
+<h3 class="anchored" data-anchor-id="step-6.-plot-mu-vs-sigma-for-the-spatial-model">Step 6. plot <span class="math inline">\(\mu^*\)</span> vs <span class="math inline">\(\sigma\)</span> for the spatial model</h3>
+<div id="fb91b083" class="cell" data-execution_count="40">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>mu_vals <span class="op">=</span> summary_wlc[<span class="st">"mu_star"</span>].values.astype(<span class="bu">float</span>)</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>sigma_vals <span class="op">=</span> summary_wlc[<span class="st">"sigma"</span>].values.astype(<span class="bu">float</span>)</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>names <span class="op">=</span> summary_wlc.index.tolist()</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>mu_mean <span class="op">=</span> <span class="bu">float</span>(np.mean(mu_vals))</span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>sigma_mean <span class="op">=</span> <span class="bu">float</span>(np.mean(sigma_vals))</span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a><span class="co"># define plotting limits with a small % padding around actual data</span></span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>mu_min <span class="op">=</span> mu_vals.<span class="bu">min</span>()</span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>mu_max <span class="op">=</span> mu_vals.<span class="bu">max</span>()</span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>sigma_min <span class="op">=</span> sigma_vals.<span class="bu">min</span>()</span>
+<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a>sigma_max <span class="op">=</span> sigma_vals.<span class="bu">max</span>()</span>
+<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a>mu_pad <span class="op">=</span> <span class="fl">0.1</span> <span class="op">*</span> (mu_max <span class="op">-</span> mu_min <span class="cf">if</span> mu_max <span class="op">&gt;</span> mu_min <span class="cf">else</span> <span class="fl">1.0</span>)</span>
+<span id="cb27-15"><a href="#cb27-15" aria-hidden="true" tabindex="-1"></a>sigma_pad <span class="op">=</span> <span class="fl">0.1</span> <span class="op">*</span> (sigma_max <span class="op">-</span> sigma_min <span class="cf">if</span> sigma_max <span class="op">&gt;</span> sigma_min <span class="cf">else</span> <span class="fl">1.0</span>)</span>
+<span id="cb27-16"><a href="#cb27-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-17"><a href="#cb27-17" aria-hidden="true" tabindex="-1"></a>x_lo <span class="op">=</span> mu_min <span class="op">-</span> mu_pad</span>
+<span id="cb27-18"><a href="#cb27-18" aria-hidden="true" tabindex="-1"></a>x_hi <span class="op">=</span> mu_max <span class="op">+</span> mu_pad</span>
+<span id="cb27-19"><a href="#cb27-19" aria-hidden="true" tabindex="-1"></a>y_lo <span class="op">=</span> sigma_min <span class="op">-</span> sigma_pad</span>
+<span id="cb27-20"><a href="#cb27-20" aria-hidden="true" tabindex="-1"></a>y_hi <span class="op">=</span> sigma_max <span class="op">+</span> sigma_pad</span>
+<span id="cb27-21"><a href="#cb27-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-22"><a href="#cb27-22" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">6</span>,<span class="dv">5</span>))</span>
+<span id="cb27-23"><a href="#cb27-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-24"><a href="#cb27-24" aria-hidden="true" tabindex="-1"></a><span class="co"># scatter points</span></span>
+<span id="cb27-25"><a href="#cb27-25" aria-hidden="true" tabindex="-1"></a>ax.scatter(mu_vals, sigma_vals,</span>
+<span id="cb27-26"><a href="#cb27-26" aria-hidden="true" tabindex="-1"></a>           s<span class="op">=</span><span class="dv">100</span>, color<span class="op">=</span><span class="st">"teal"</span>, edgecolor<span class="op">=</span><span class="st">"k"</span>, zorder<span class="op">=</span><span class="dv">3</span>)</span>
+<span id="cb27-27"><a href="#cb27-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-28"><a href="#cb27-28" aria-hidden="true" tabindex="-1"></a><span class="co"># adaptive label offset: 2% of axis span instead of hardcoded 0.02</span></span>
+<span id="cb27-29"><a href="#cb27-29" aria-hidden="true" tabindex="-1"></a>x_offset <span class="op">=</span> <span class="fl">0.02</span> <span class="op">*</span> (x_hi <span class="op">-</span> x_lo)</span>
+<span id="cb27-30"><a href="#cb27-30" aria-hidden="true" tabindex="-1"></a>y_offset <span class="op">=</span> <span class="fl">0.02</span> <span class="op">*</span> (y_hi <span class="op">-</span> y_lo)</span>
+<span id="cb27-31"><a href="#cb27-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-32"><a href="#cb27-32" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> x, y, label <span class="kw">in</span> <span class="bu">zip</span>(mu_vals, sigma_vals, names):</span>
+<span id="cb27-33"><a href="#cb27-33" aria-hidden="true" tabindex="-1"></a>    ax.text(x <span class="op">+</span> x_offset, y <span class="op">+</span> y_offset, label,</span>
+<span id="cb27-34"><a href="#cb27-34" aria-hidden="true" tabindex="-1"></a>            fontsize<span class="op">=</span><span class="dv">10</span>, zorder<span class="op">=</span><span class="dv">4</span>)</span>
+<span id="cb27-35"><a href="#cb27-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-36"><a href="#cb27-36" aria-hidden="true" tabindex="-1"></a><span class="co"># reference lines</span></span>
+<span id="cb27-37"><a href="#cb27-37" aria-hidden="true" tabindex="-1"></a>ax.axvline(mu_mean, color<span class="op">=</span><span class="st">"gray"</span>, linestyle<span class="op">=</span><span class="st">"--"</span>, alpha<span class="op">=</span><span class="fl">0.6</span>,</span>
+<span id="cb27-38"><a href="#cb27-38" aria-hidden="true" tabindex="-1"></a>           label<span class="op">=</span><span class="ss">f"mean μ* = </span><span class="sc">{</span>mu_mean<span class="sc">:.2f}</span><span class="ss">"</span>)</span>
+<span id="cb27-39"><a href="#cb27-39" aria-hidden="true" tabindex="-1"></a>ax.axhline(sigma_mean, color<span class="op">=</span><span class="st">"gray"</span>, linestyle<span class="op">=</span><span class="st">"--"</span>, alpha<span class="op">=</span><span class="fl">0.6</span>,</span>
+<span id="cb27-40"><a href="#cb27-40" aria-hidden="true" tabindex="-1"></a>           label<span class="op">=</span><span class="ss">f"mean σ = </span><span class="sc">{</span>sigma_mean<span class="sc">:.2e}</span><span class="ss">"</span>)</span>
+<span id="cb27-41"><a href="#cb27-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-42"><a href="#cb27-42" aria-hidden="true" tabindex="-1"></a><span class="co"># set sane limits</span></span>
+<span id="cb27-43"><a href="#cb27-43" aria-hidden="true" tabindex="-1"></a>ax.set_xlim(x_lo, x_hi)</span>
+<span id="cb27-44"><a href="#cb27-44" aria-hidden="true" tabindex="-1"></a>ax.set_ylim(y_lo, y_hi)</span>
+<span id="cb27-45"><a href="#cb27-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-46"><a href="#cb27-46" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">"μ* (overall influence on predicted mass)"</span>)</span>
+<span id="cb27-47"><a href="#cb27-47" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">"σ (interaction / nonlinearity)"</span>)</span>
+<span id="cb27-48"><a href="#cb27-48" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">"Morris Sensitivity Screening — Penguin Body Mass Model"</span>)</span>
+<span id="cb27-49"><a href="#cb27-49" aria-hidden="true" tabindex="-1"></a>ax.grid(alpha<span class="op">=</span><span class="fl">0.3</span>)</span>
+<span id="cb27-50"><a href="#cb27-50" aria-hidden="true" tabindex="-1"></a>ax.legend(loc<span class="op">=</span><span class="st">"upper left"</span>, frameon<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb27-51"><a href="#cb27-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-52"><a href="#cb27-52" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Morris_Elementary_Effects_files/figure-html/cell-22-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<section id="interpretation-1" class="level4">
+<h4 class="anchored" data-anchor-id="interpretation-1">Interpretation</h4>
+<p>The plot above shows the Morris μ★–σ diagram for our synthetic spatial suitability model. Each point represents one of the four input weights varied in the analysis:</p>
+<ul>
+<li><p><span class="math inline">\(\mu^*\)</span> (x-axis) — measures the overall influence of that weight on the model output (mean absolute elementary effect). A larger <span class="math inline">\(\mu^*\)</span> means that changing this weight tends to change the suitability outcome more strongly — i.e., it is a more influential parameter overall.</p></li>
+<li><p><span class="math inline">\(\sigma\)</span> (y-axis) — measures the variability of those effects across the parameter space. A higher <span class="math inline">\(\sigma\)</span> indicates nonlinear behavior or interactions with other parameters. In other words, the effect of that weight depends on the values of other weights or on specific regions of the input space.</p></li>
+</ul>
+<section id="what-the-plot-shows" class="level5">
+<h5 class="anchored" data-anchor-id="what-the-plot-shows">What the plot shows:</h5>
+<p><span class="math inline">\(w_{slope}\)</span> shows the highest <span class="math inline">\(\mu^*\)</span> — meaning that the slope criterion is the dominant control on how much land is classified as suitable. This makes intuitive sense: slope strongly affects recharge potential, and our transformation for slope was nonlinear, creating steep contrasts between gentle and steep terrain.</p>
+<p><span class="math inline">\(w_{perm}\)</span> and <span class="math inline">\(w_{rain}\)</span> have moderate <span class="math inline">\(\mu^*\)</span> values — they influence suitability, but to a smaller degree. Their relatively low <span class="math inline">\(\sigma\)</span> values suggest that their effects are more linear and consistent across different weight combinations.</p>
+<p><span class="math inline">\(w_{int}\)</span> (the interaction weight) has a slightly lower <span class="math inline">\(\mu^*\)</span> than <span class="math inline">\(w_{slope}\)</span> but a comparable or higher <span class="math inline">\(\sigma\)</span> — meaning it contributes less to the total suitability on average but behaves nonlinearly. This reflects the fact that its impact depends on the combination of permeability and rainfall, not on either one alone.</p>
+<p><strong>therefore:</strong> - The slope weight is the most critical lever — changing it will have the greatest and most consistent effect on the area classified as “high-suitability.”</p>
+<ul>
+<li><p>The interaction term is important to monitor — it introduces context-dependent variability and captures coupled effects of rainfall and permeability.</p></li>
+<li><p>The other weights behave more linearly, meaning that their influence can be anticipated more easily and modeled with less uncertainty.</p></li>
+</ul>
+<p><strong>This is a hallmark Morris result:</strong></p>
+<ul>
+<li>Parameters with high <span class="math inline">\(\mu^*\)</span> and low <span class="math inline">\(\sigma\)</span> → strong, predictable influence.</li>
+<li>Parameters with moderate <span class="math inline">\(\mu^*\)</span> but high <span class="math inline">\(\sigma\)</span> → interactive or nonlinear influence.</li>
+<li>Parameters with low <span class="math inline">\(\mu^*\)</span> and low <span class="math inline">\(\sigma\)</span> → negligible or near-linear effect.</li>
+</ul>
+</section>
+</section>
+</section>
+</section>
+<section id="review-questions" class="level2">
+<h2 class="anchored" data-anchor-id="review-questions">Review Questions</h2>
+<section id="conceptual" class="level3">
+<h3 class="anchored" data-anchor-id="conceptual">Conceptual</h3>
+<ol type="1">
+<li><p>What is the main purpose of the Morris elementary effects method in sensitivity analysis?</p></li>
+<li><p>How does Morris differ from a simple one-at-a-time (OAT) sensitivity analysis?</p></li>
+<li><p>In the Morris method, what does the elementary effect represent for a given input parameter?</p></li>
+<li><p>Why do we calculate both <span class="math inline">\(\mu^*\)</span> (mu-star) and <span class="math inline">\(\sigma\)</span> (sigma), and what does each measure tell us?</p></li>
+<li><p>What does a high <span class="math inline">\(\mu^*\)</span> combined with a low <span class="math inline">\(\sigma\)</span> imply about a model parameter?</p></li>
+<li><p>What does a high <span class="math inline">\(\sigma\)</span> (standard deviation of elementary effects) indicate about a parameter’s behavior?</p></li>
+<li><p>How do nonlinearities or interactions among variables influence <span class="math inline">\(\sigma\)</span> in Morris results?</p></li>
+<li><p>Why is Morris sometimes called a “screening” method rather than a “full” global sensitivity method?</p></li>
+<li><p>What is the role of <span class="math inline">\(\Delta\)</span> (delta) in the Morris method, and how is it typically chosen?</p></li>
+<li><p>In a spatial MCDA context, what might a model input represent, and what would the model output represent in a Morris analysis?</p></li>
+</ol>
+</section>
+<section id="interpretation-2" class="level3">
+<h3 class="anchored" data-anchor-id="interpretation-2">Interpretation</h3>
+<ol start="11" type="1">
+<li><p>On a <span class="math inline">\(\mu^*\)</span>–<span class="math inline">\(\sigma\)</span> plot, where would you expect to find a highly linear and dominant variable?</p></li>
+<li><p>What does it mean if a point is high on the σ axis but low on μ★?</p></li>
+<li><p>In the penguin example, why did σ values collapse toward zero?</p></li>
+<li><p>In the synthetic raster model, why does the interaction term (w_int) often have a high <span class="math inline">\(\sigma\)</span>?</p></li>
+<li><p>How might a decision-maker interpret high <span class="math inline">\(\sigma\)</span> in a spatial suitability model?</p></li>
+</ol>
+</section>
+<section id="answers" class="level3">
+<h3 class="anchored" data-anchor-id="answers">Answers</h3>
+<blockquote class="blockquote">
+<p><em>1. The main purpose of the Morris elementary effects method is to identify which input variables have the greatest overall influence on a model’s output, and to detect whether their effects are linear, nonlinear, or involve interactions with other inputs.</em></p>
+</blockquote>
+<blockquote class="blockquote">
+<p><em>2. Unlike a simple one-at-a-time (OAT) analysis that tests variables around a single baseline, Morris repeats OAT experiments across many random starting points in the input space, allowing it to capture global (not just local) sensitivity patterns.</em></p>
+</blockquote>
+<blockquote class="blockquote">
+<p><em>3. The elementary effect for a given parameter represents the change in model output resulting from a small perturbation of that parameter, divided by the size of the change (<span class="math inline">\(\Delta\)</span>). It approximates the local slope of the model’s response surface.</em></p>
+</blockquote>
+<blockquote class="blockquote">
+<p><em>4. <span class="math inline">\(\mu^*\)</span> measures the average magnitude of influence of an input (its overall importance), while σ measures how variable that influence is across the input space (nonlinearity or interaction effects).</em></p>
+</blockquote>
+<blockquote class="blockquote">
+<p><em>5. A high <span class="math inline">\(\mu^*\)</span> and low <span class="math inline">\(\sigma\)</span> indicate a parameter that has a strong, consistent, and largely linear effect on the model output.</em></p>
+</blockquote>
+<blockquote class="blockquote">
+<p><em>6. A high <span class="math inline">\(\sigma\)</span> means the parameter’s influence changes across the input space — suggesting nonlinear behavior or interactions with other parameters.</em></p>
+</blockquote>
+<blockquote class="blockquote">
+<p><em>7. Nonlinearities or interactions cause <span class="math inline">\(\sigma\)</span> to increase because the sign or magnitude of the elementary effects vary depending on where in the parameter space the sample is taken.</em></p>
+</blockquote>
+<blockquote class="blockquote">
+<p><em>8. Morris is called a “screening” method because it efficiently identifies which parameters are important without requiring full global variance decomposition (like Sobol or FAST). It’s often used as a first step before more detailed analyses.</em></p>
+</blockquote>
+<blockquote class="blockquote">
+<p><em>9. <span class="math inline">\(\Delta\)</span> (delta) defines the size of the perturbation for each elementary effect. It is typically a small fraction (e.g., 0.1–0.2) of the parameter’s total range to ensure that local changes approximate the model’s gradient while still exploring meaningful variability.</em></p>
+</blockquote>
+<blockquote class="blockquote">
+<p><em>10. In a spatial MCDA, model inputs might represent layer weights (e.g., slope, permeability, rainfall importance), while the output could represent an aggregated measure such as overall suitability, recharge potential, or % of land above a suitability threshold.</em></p>
+</blockquote>
+<hr>
+<blockquote class="blockquote">
+<p><em>11. A highly linear and dominant variable appears toward the lower right of the <span class="math inline">\(\mu^*\)</span>–<span class="math inline">\(\sigma\)</span> plot — high <span class="math inline">\(\mu^*\)</span>(strong influence) and low <span class="math inline">\(\sigma\)</span> (consistent, linear behavior).</em></p>
+</blockquote>
+<blockquote class="blockquote">
+<p><em>12. A point high on the <span class="math inline">\(\sigma\)</span> axis but low on <span class="math inline">\(\mu^*\)</span> represents a parameter with weak average influence but strong nonlinear or context-dependent effects.</em></p>
+</blockquote>
+<blockquote class="blockquote">
+<p><em>13. In the penguin example, <span class="math inline">\(\sigma\)</span> values collapsed toward zero because the regression model was purely linear and additive, so each variable’s effect was constant and did not vary with the others.</em></p>
+</blockquote>
+<blockquote class="blockquote">
+<p><em>14. In the synthetic raster model, the interaction weight (w_int) often has a high σ because its influence depends jointly on permeability and rainfall — the effect is strong only where both variables are favorable.</em></p>
+</blockquote>
+<blockquote class="blockquote">
+<p><em>15. A decision-maker might interpret high <span class="math inline">\(\sigma\)</span> as an indicator of uncertainty or context dependency — meaning that the importance of that criterion changes across the landscape or depends on how other factors are weighted.</em></p>
+</blockquote>
+
+
+</section>
+</section>
 </section>
 
 </main> <!-- /main -->

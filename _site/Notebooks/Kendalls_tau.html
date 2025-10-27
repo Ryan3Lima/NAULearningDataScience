@@ -224,9 +224,15 @@ window.Quarto = {
   <li><a href="#compare-manual-calculation-to-scipy.stats" id="toc-compare-manual-calculation-to-scipy.stats" class="nav-link" data-scroll-target="#compare-manual-calculation-to-scipy.stats">Compare manual calculation to scipy.stats</a></li>
   <li><a href="#adding-complexity" id="toc-adding-complexity" class="nav-link" data-scroll-target="#adding-complexity">Adding complexity</a></li>
   <li><a href="#real-world-example---countries-ranked-by-life-expectency-and-gdp" id="toc-real-world-example---countries-ranked-by-life-expectency-and-gdp" class="nav-link" data-scroll-target="#real-world-example---countries-ranked-by-life-expectency-and-gdp">real-world example - Countries Ranked by Life Expectency and GDP</a></li>
-  <li><a href="#conceptual-questions" id="toc-conceptual-questions" class="nav-link" data-scroll-target="#conceptual-questions">CONCEPTUAL QUESTIONS</a></li>
+  <li><a href="#practice-questions" id="toc-practice-questions" class="nav-link" data-scroll-target="#practice-questions">Practice Questions</a></li>
   <li><a href="#spatial-rank-correlation" id="toc-spatial-rank-correlation" class="nav-link" data-scroll-target="#spatial-rank-correlation">Spatial Rank Correlation</a></li>
   <li><a href="#simulated-mcda-suitability" id="toc-simulated-mcda-suitability" class="nav-link" data-scroll-target="#simulated-mcda-suitability">simulated MCDA suitability</a></li>
+  <li><a href="#review-questions" id="toc-review-questions" class="nav-link" data-scroll-target="#review-questions">Review Questions</a>
+  <ul class="collapse">
+  <li><a href="#conceptual" id="toc-conceptual" class="nav-link" data-scroll-target="#conceptual">Conceptual</a></li>
+  <li><a href="#applied-interpretive" id="toc-applied-interpretive" class="nav-link" data-scroll-target="#applied-interpretive">Applied Interpretive</a></li>
+  <li><a href="#answers" id="toc-answers" class="nav-link" data-scroll-target="#answers">Answers</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -998,17 +1004,20 @@ p-value = 0.02515424</code></pre>
 </div>
 <p>The analysis of country rank in terms of GDP per capita vs life expectancy using Kendall’s tau tells us that overall life expectency is correlated with GDP per capita in terms of how contries compare to eachother (rank), however the correlation is much worse in the rich countries, why might that be?</p>
 </section>
-<section id="conceptual-questions" class="level2">
-<h2 class="anchored" data-anchor-id="conceptual-questions">CONCEPTUAL QUESTIONS</h2>
+<section id="practice-questions" class="level2">
+<h2 class="anchored" data-anchor-id="practice-questions">Practice Questions</h2>
 <ol type="1">
 <li>Is Kendall’s Tau a good way to measure the correlation of these two variables?</li>
 </ol>
 <blockquote class="blockquote">
-<p>answer: Its more approriate to look at how the Life Expectency values compare to the GDP per capita directly using Pearson’s R, which compares one number to another. Kendall’s Tau is for comparing the ranks, so the colored rank figure shows us that countries below the line, are under performing in terms of life expectancy vs GDP relative to their neighbors. It is also telling us the the GDP life expectency relationship breaks down at higher levels of GDP or is less meaningful.</p>
+<p><em>answer: Its more approriate to look at how the Life Expectency values compare to the GDP per capita directly using Pearson’s R, which compares one number to another. Kendall’s Tau is for comparing the ranks, so the colored rank figure shows us that countries below the line, are under performing in terms of life expectancy vs GDP relative to their neighbors. It is also telling us the the GDP life expectency relationship breaks down at higher levels of GDP or is less meaningful.</em></p>
 </blockquote>
 <ol start="2" type="1">
 <li>Why might this relationship breakdown when subsetting the data to only the richest countries?</li>
 </ol>
+<blockquote class="blockquote">
+<p><em>answer: Several potential reasons….once you have enough money to pay for healthcare and have access to good food, increases in GDP after a certain point stop increasing lifespan. Also with inequality growing, perhaps the per capita GDP is misleading perhaps median income might be a better metric than per capita GDP.</em></p>
+</blockquote>
 </section>
 <section id="spatial-rank-correlation" class="level2">
 <h2 class="anchored" data-anchor-id="spatial-rank-correlation">Spatial Rank Correlation</h2>
@@ -1031,7 +1040,7 @@ p-value = 0.02515424</code></pre>
 <li><p>compute <span class="math inline">\(\tau\)</span> for the full map</p></li>
 <li><p>visualize where ranks changed the most.</p></li>
 </ol>
-<div id="2b1cb740" class="cell" data-execution_count="49">
+<div id="2b1cb740" class="cell" data-execution_count="17">
 <div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">42</span>)</span>
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Step 1: create two synthetic suitability grids (values 1–10) ---</span></span>
@@ -1070,7 +1079,7 @@ p-value = 0.02515424</code></pre>
 </div>
 </div>
 </div>
-<div id="098d30ee" class="cell" data-execution_count="50">
+<div id="098d30ee" class="cell" data-execution_count="18">
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Step 3: compute Kendall’s tau on the flattened ranks ---</span></span>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>A_flat <span class="op">=</span> suitability_A.flatten()</span>
 <span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>B_flat <span class="op">=</span> suitability_B.flatten()</span>
@@ -1084,7 +1093,7 @@ p-value = 0.02515424</code></pre>
 <pre><code>Overall spatial Kendall’s τ = 0.997 -- Pvalue: 0.0000</code></pre>
 </div>
 </div>
-<div id="f50e0d35" class="cell" data-execution_count="51">
+<div id="f50e0d35" class="cell" data-execution_count="19">
 <div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>rank_diff <span class="op">=</span> (rank_B <span class="op">-</span> rank_A).values.reshape(grid_size, grid_size)</span>
 <span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">6</span>,<span class="dv">5</span>))</span>
@@ -1102,8 +1111,77 @@ p-value = 0.02515424</code></pre>
 </div>
 </div>
 </div>
+</section>
+<section id="review-questions" class="level2">
+<h2 class="anchored" data-anchor-id="review-questions">Review Questions</h2>
+<section id="conceptual" class="level3">
+<h3 class="anchored" data-anchor-id="conceptual">Conceptual</h3>
+<ol type="1">
+<li><p>What type of relationship does Kendall’s rank correlation coefficient (<span class="math inline">\(\tau\)</span>) measure between two variables?</p></li>
+<li><p>In what ways does Kendall’s <span class="math inline">\(\tau\)</span> differ from Pearson’s <span class="math inline">\(r\)</span> correlation coefficient?</p></li>
+<li><p>What do we mean by a concordant pair and a discordant pair in the context of Kendall’s <span class="math inline">\(\tau\)</span>?</p></li>
+<li><p>Write the general formula for Kendall’s <span class="math inline">\(\tau\)</span> in terms of the number of concordant (<span class="math inline">\(C\)</span>) and discordant (<span class="math inline">\(D\)</span>) pairs, and the total number of pairs (<span class="math inline">\(T\)</span>).</p></li>
+<li><p>What does a <span class="math inline">\(\tau\)</span> value of <span class="math inline">\(+1\)</span>, <span class="math inline">\(0\)</span>, and <span class="math inline">\(-1\)</span> indicate about the association between two rankings?</p></li>
+<li><p>Why is Kendall’s <span class="math inline">\(\tau\)</span> considered a non-parametric statistic? What assumption does it avoid that Pearson’s <span class="math inline">\(r\)</span> requires?</p></li>
+<li><p>Explain how tied ranks affect the calculation of Kendall’s <span class="math inline">\(\tau\)</span>. What adjustments are sometimes made to account for ties?</p></li>
+<li><p>How can Kendall’s <span class="math inline">\(\tau\)</span> be interpreted as a difference in probabilities between concordant and discordant pairs?</p></li>
+<li><p>What is the computational relationship between Kendall’s <span class="math inline">\(\tau\)</span> and Spearman’s <span class="math inline">\(\rho\)</span> in terms of how they treat rank differences?</p></li>
+<li><p>Why might Kendall’s <span class="math inline">\(\tau\)</span> be preferred over Pearson’s <span class="math inline">\(r\)</span> when comparing ordinal data such as survey responses or ranked preferences?</p></li>
+</ol>
+</section>
+<section id="applied-interpretive" class="level3">
+<h3 class="anchored" data-anchor-id="applied-interpretive">Applied Interpretive</h3>
+<ol start="11" type="1">
+<li><p>Suppose two analysts rank five sites for groundwater recharge suitability. Analyst A’s and B’s rankings are nearly identical except for one swapped pair. Would you expect <span class="math inline">\(\tau\)</span> to be closer to 1, 0, or -1? Why?</p></li>
+<li><p>If a scatter plot of ranks shows that higher values of one ranking generally correspond to higher values of the other but with some local reversals, what approximate range of <span class="math inline">\(\tau\)</span> would you expect?</p></li>
+</ol>
+</section>
+<section id="answers" class="level3">
+<h3 class="anchored" data-anchor-id="answers">Answers</h3>
+<blockquote class="blockquote">
+<p><em>1. Kendall’s rank correlation coefficient (<span class="math inline">\(\tau\)</span>) measures the strength and direction of <strong>monotonic association</strong> between two ranked variables. It quantifies how consistently the order of one variable corresponds to the order of another.</em></p>
+</blockquote>
+<blockquote class="blockquote">
+<p><em>2. Kendall’s <span class="math inline">\(\tau\)</span> is based on the <strong>number of concordant and discordant pairs</strong>, whereas Pearson’s <span class="math inline">\(r\)</span> measures <strong>linear association</strong> based on actual data values. Kendall’s <span class="math inline">\(\tau\)</span> is non-parametric and uses only rank order information.</em></p>
+</blockquote>
+<blockquote class="blockquote">
+<p><em>3. A <strong>concordant pair</strong> is one where the relative ordering of two items is the same in both rankings (both increasing or both decreasing). A <strong>discordant pair</strong> is one where the order is reversed between the two rankings.</em></p>
+</blockquote>
+<blockquote class="blockquote">
+<p><em>4. The general formula is:</em> <span class="math display">\[
+\tau = \frac{C - D}{T} = \frac{C - D}{\frac{1}{2}n(n - 1)}
+\]</span> <em>where <span class="math inline">\(C\)</span> is the number of concordant pairs, <span class="math inline">\(D\)</span> is the number of discordant pairs, and <span class="math inline">\(T\)</span> is the total number of distinct pairs.</em></p>
+</blockquote>
+<blockquote class="blockquote">
+<p><em>5. <span class="math inline">\(\tau = +1\)</span> indicates perfect agreement (all pairs are concordant), <span class="math inline">\(\tau = 0\)</span> indicates no association (equal mix of concordant and discordant pairs), and <span class="math inline">\(\tau = -1\)</span> indicates perfect disagreement (all pairs are discordant).</em></p>
+</blockquote>
+<blockquote class="blockquote">
+<p><em>6. Kendall’s <span class="math inline">\(\tau\)</span> is non-parametric because it does not assume any specific distribution of the variables or linearity of their relationship. It relies only on the ordinal information of the ranks rather than their numeric values.</em></p>
+</blockquote>
+<blockquote class="blockquote">
+<p><em>7. Tied ranks reduce the number of distinct pairs that can be classified as concordant or discordant. Adjusted versions of Kendall’s <span class="math inline">\(\tau\)</span> (e.g., <span class="math inline">\(\tau_b\)</span>) include correction factors to handle ties in one or both rankings.</em></p>
+</blockquote>
+<blockquote class="blockquote">
+<p><em>8. Kendall’s <span class="math inline">\(\tau\)</span> can be expressed as a difference in probabilities:</em> <span class="math display">\[
+\tau = P(\text{concordant}) - P(\text{discordant})
+\]</span> <em>meaning it represents how much more likely it is that two randomly chosen observations are ranked in the same order than in the opposite order.</em></p>
+</blockquote>
+<blockquote class="blockquote">
+<p><em>9. Spearman’s <span class="math inline">\(\rho\)</span> is based on the <strong>differences between ranks</strong> and approximates Pearson’s <span class="math inline">\(r\)</span> computed on ranks, while Kendall’s <span class="math inline">\(\tau\)</span> directly counts <strong>pairwise order agreements</strong>. Both measure monotonic relationships, but Kendall’s <span class="math inline">\(\tau\)</span> is generally smaller in magnitude and has a clearer probabilistic interpretation.</em></p>
+</blockquote>
+<blockquote class="blockquote">
+<p><em>10. Kendall’s <span class="math inline">\(\tau\)</span> is preferred for ordinal data because it depends only on the relative ordering of observations, making it robust to nonlinearity and outliers. Pearson’s <span class="math inline">\(r\)</span> assumes interval-scale data and linearity, which are often not valid for ranked responses.</em></p>
+</blockquote>
+<hr>
+<blockquote class="blockquote">
+<p><em>11. The value of <span class="math inline">\(\tau\)</span> would be close to <span class="math inline">\(+1\)</span>, since most pairs remain concordant and only one pair is discordant. A single reversal in a small dataset slightly lowers <span class="math inline">\(\tau\)</span> but does not change its sign.</em></p>
+</blockquote>
+<blockquote class="blockquote">
+<p><em>12. The value of <span class="math inline">\(\tau\)</span> would likely fall between <span class="math inline">\(0.4\)</span> and <span class="math inline">\(0.8\)</span>, indicating a moderately strong positive monotonic association with some inconsistencies in the ordering.</em></p>
+</blockquote>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->
