@@ -198,14 +198,8 @@ window.Quarto = {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../summary.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Summary</span></span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../references.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">References</span></a>
+  <a href="../Notebooks/Sobol_variance.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Sobol’ Variance-Based Sensitivity Analysis</span></span></a>
   </div>
 </li>
     </ul>
@@ -222,9 +216,10 @@ window.Quarto = {
   <li><a href="#the-counting-pairwise-formula" id="toc-the-counting-pairwise-formula" class="nav-link" data-scroll-target="#the-counting-pairwise-formula">The counting (pairwise) formula</a></li>
   <li><a href="#compute-kendalls-tau-from-first-principles" id="toc-compute-kendalls-tau-from-first-principles" class="nav-link" data-scroll-target="#compute-kendalls-tau-from-first-principles">Compute Kendall’s Tau from first principles</a></li>
   <li><a href="#compare-manual-calculation-to-scipy.stats" id="toc-compare-manual-calculation-to-scipy.stats" class="nav-link" data-scroll-target="#compare-manual-calculation-to-scipy.stats">Compare manual calculation to scipy.stats</a></li>
-  <li><a href="#adding-complexity" id="toc-adding-complexity" class="nav-link" data-scroll-target="#adding-complexity">Adding complexity</a></li>
-  <li><a href="#real-world-example---countries-ranked-by-life-expectency-and-gdp" id="toc-real-world-example---countries-ranked-by-life-expectency-and-gdp" class="nav-link" data-scroll-target="#real-world-example---countries-ranked-by-life-expectency-and-gdp">real-world example - Countries Ranked by Life Expectency and GDP</a></li>
+  <li><a href="#real-world-example---countries-ranked-by-life-expectency-and-gdp" id="toc-real-world-example---countries-ranked-by-life-expectency-and-gdp" class="nav-link" data-scroll-target="#real-world-example---countries-ranked-by-life-expectency-and-gdp">real-world example - Countries Ranked by Life Expectency and GDP</a>
+  <ul class="collapse">
   <li><a href="#practice-questions" id="toc-practice-questions" class="nav-link" data-scroll-target="#practice-questions">Practice Questions</a></li>
+  </ul></li>
   <li><a href="#spatial-rank-correlation" id="toc-spatial-rank-correlation" class="nav-link" data-scroll-target="#spatial-rank-correlation">Spatial Rank Correlation</a></li>
   <li><a href="#simulated-mcda-suitability" id="toc-simulated-mcda-suitability" class="nav-link" data-scroll-target="#simulated-mcda-suitability">simulated MCDA suitability</a></li>
   <li><a href="#review-questions" id="toc-review-questions" class="nav-link" data-scroll-target="#review-questions">Review Questions</a>
@@ -258,12 +253,13 @@ window.Quarto = {
 </header>
 
 
+<p><a href="https://www.youtube.com/watch?v=Pm8KV5f3JM0">Video - Kendall’s Tau Easily Explained - Youtube</a></p>
 <p>In statistics, the <a href="https://en.wikipedia.org/wiki/Kendall_rank_correlation_coefficient">Kendall rank correlation coefficient</a>, commonly referred to as Kendall’s tau (τ), is a statistic used to measure the ordinal association between two measured quantities. A <strong>T test</strong> is a <a href="https://en.wikipedia.org/wiki/Non-parametric_statistics">non-parametric</a> <a href="https://en.wikipedia.org/wiki/Hypothesis_test">hypothesis test</a> for statistical dependence based on the <span class="math inline">\(T\)</span> coefficient. It is a measure of <a href="https://en.wikipedia.org/wiki/Rank_correlation">rank correlation</a>: the similarity of the orderings of data when ranked by each of the quantities. It is named after <a href="https://en.wikipedia.org/wiki/Maurice_Kendall">Maurice Kendall</a>, who developed it in 1938, though Gustav Fechner has proposed a similar measure in the context of time series in 1897.</p>
 <p>Kendall’s motification was to create a rubust, intuitive measure of association between two rankings–one that was: - non parameteric – meaning it made no assumptions about the distribution of the data - intuative in interpretation – meaning it could be easily understood (based on concordant and discordant pairs) and - suitable for ordinal or ranked data (like preferences, ratings, or scores).</p>
 <p>Before Kendall’s tau, other correlation measures like <a href="https://en.wikipedia.org/wiki/Pearson_correlation_coefficient">Pearson’s correlation coefficient</a> were commonly used, but they assumed linear relationships and required interval or ratio data. Kendall’s tau provided a way to assess relationships in a more flexible manner, especially for non-linear or non-parametric data.</p>
 <p>In many real-world problems, especially in decision analysis (also social sciences) data are often ordinal – things we can rank but not measure on a precise numerical scale.</p>
 <p>For example: a hydrologist looking to build a groundwater recharge project, might want to rank potential sites based on suitability critiera, and rank them in suitability from 1 (low suitability) to 5 or 10 (high suitability). Kendall’s tau would allow the hydrologist to assess the association between different ranking criteria (like soil type, proximity to water sources, land use, etc.) without making assumptions about the underlying data distribution.</p>
-<p>## How it works</p>
+<p><strong>How it works</strong></p>
 <p>Imagine two people rank the same set of sites independently based on their expert opinion of suitability for groundwater recharge.</p>
 <table class="caption-top table">
 <thead>
@@ -301,10 +297,20 @@ window.Quarto = {
 </tr>
 </tbody>
 </table>
-<p>Kendall’s tau looks at <strong>all possible pairs of sites</strong> (S1 vs S2, S1 vs S3, … S4 vs S5) and asks: - Do the two analysts agree on which site should be ranked higher?</p>
-<p>For any pair of sites <span class="math inline">\((i, j)\)</span>: - The pair is <strong>concordant</strong> if both analysts put the same site higher.<br>
-(Example: if <span class="math inline">\(A\)</span> says <span class="math inline">\(S2\)</span> better than <span class="math inline">\(S5\)</span>, and <span class="math inline">\(B\)</span> also says <span class="math inline">\(S2\)</span> better than <span class="math inline">\(S5\)</span>.) - The pair is <strong>discordant</strong> if the analysts disagree about which one is better.<br>
-(Example: A says <span class="math inline">\(S1\)</span> better than <span class="math inline">\(S4\)</span>, but <span class="math inline">\(B\)</span> says <span class="math inline">\(S4\)</span> better than <span class="math inline">\(S1\)</span>.) - (Ties are possible in general, though not shown in this simple example. We handle those with slight variations of tau.)</p>
+<p>Kendall’s tau looks at <strong>all possible pairs of sites</strong> (S1 vs S2, S1 vs S3, … S4 vs S5) and asks:</p>
+<ul>
+<li>Do the two analysts agree on which site should be ranked higher?</li>
+</ul>
+<p>For any pair of sites <span class="math inline">\((i, j)\)</span>:</p>
+<ul>
+<li><p>The pair is <strong>concordant</strong> if both analysts put the same site higher.<br>
+(Example: if <span class="math inline">\(A\)</span> says <span class="math inline">\(S2\)</span> better than <span class="math inline">\(S5\)</span>, and <span class="math inline">\(B\)</span> also says <span class="math inline">\(S2\)</span> better than <span class="math inline">\(S5\)</span>.)</p></li>
+<li><p>The pair is <strong>discordant</strong> if the analysts disagree about which one is better.<br>
+(Example: A says <span class="math inline">\(S1\)</span> better than <span class="math inline">\(S4\)</span>, but <span class="math inline">\(B\)</span> says <span class="math inline">\(S4\)</span> better than <span class="math inline">\(S1\)</span>.)</p></li>
+</ul>
+<blockquote class="blockquote">
+<p>(Ties are possible in general, though not shown in this simple example. We handle those with slight variations of tau.)</p>
+</blockquote>
 <p>Intuition: - If most pairs are concordant → <span class="math inline">\(\tau\)</span> is close to +1 (the rankings mostly agree). - If most pairs are discordant → <span class="math inline">\(\tau\)</span> is close to −1 (the rankings mostly disagree / almost inverted). - If agreement and disagreement are about equal → <span class="math inline">\(\tau\)</span> is near 0.</p>
 <hr>
 <section id="the-probability-view" class="level2">
@@ -332,14 +338,15 @@ window.Quarto = {
 = \frac{C - D}{\frac{1}{2} n (n - 1)}
 \]</span></p>
 <p>This is the same as the “probability” version, just written in terms of counts instead of proportions: - <span class="math inline">\(\frac{C}{T}\)</span> is <span class="math inline">\(P(\text{concordant})\)</span> - <span class="math inline">\(\frac{D}{T}\)</span> is <span class="math inline">\(P(\text{discordant})\)</span></p>
-<p>So: <span class="math display">\[
+<p><strong>So:</strong></p>
+<p><span class="math display">\[
 \tau = \frac{C}{T} - \frac{D}{T}
 \]</span></p>
 <hr>
 <p>In practice, we’ll compute <span class="math inline">\(C\)</span> and <span class="math inline">\(D\)</span> from two ranked lists, calculate <span class="math inline">\(\tau\)</span>, and then visualize where disagreements are happening spatially or across alternatives.</p>
 <p>Next, we’ll implement this calculation in Python, both “by hand” (to see C and D) and using <code>scipy.stats.kendalltau</code>.</p>
 <blockquote class="blockquote">
-<p>Now lets explore how to calculate Kendall’s tau using Python.</p>
+<p><strong>Now lets explore how to calculate Kendall’s tau using Python.</strong></p>
 </blockquote>
 <div id="0ec83c94" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># import pandas to create an manipulate dataframes</span></span>
@@ -410,7 +417,7 @@ window.Quarto = {
 </div>
 </div>
 <blockquote class="blockquote">
-<p>Ok, now lets create a function that checks all possible pairings rankings to determine concordant (agreeing) and discordant (disagreeing) pairs.</p>
+<p><strong>Now lets create a function that checks all possible pairings rankings to determine concordant (agreeing) and discordant (disagreeing) pairs. </strong></p>
 </blockquote>
 <div id="fce26fcc" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># itertools is a useful library for creating combinations and permutations</span></span>
@@ -615,13 +622,11 @@ window.Quarto = {
 Kendall's tau (manual calculation): 0.733</code></pre>
 </div>
 </div>
-<blockquote class="blockquote">
-<p>Interpreting the results</p>
-</blockquote>
+<p><strong>Interpreting the results</strong></p>
 <p>if tau is close to +1, the rankings mostly agree if tau is close to 0.5, mostly agree but with notable flips if tau is close to -1, the rankings mostly disagree if tau is close to -0.5, mostly disagree but with agreements if tau is close to 0, there is little association between the rankings</p>
 <p>For this synthetic dataset we should see <span class="math inline">\(\tau\)</span> as high but not 1 because those B vs C and E vs F swaps create discordance.</p>
 <blockquote class="blockquote">
-<p>Next lets visualize the agreement and disagreement between the two rankings.</p>
+<p><strong>Next lets visualize the agreement and disagreement between the two rankings.</strong></p>
 </blockquote>
 <p>To do this we will plot…</p>
 <div id="e5f8ecfe" class="cell" data-execution_count="4">
@@ -722,10 +727,8 @@ Kendall's tau (manual calculation): 0.733</code></pre>
 <li>It computes Kendall’s tau using an efficient algorithm measuring the strength of <a href="https://en.wikipedia.org/wiki/Monotonic_function">monotonic</a> association between two rankings.</li>
 <li>It provides a p-value for testing the null hypothesis that there is no association between the two rankings (i.e., <span class="math inline">\(\tau = 0\)</span>). A low p-value (typically &lt; 0.05) indicates that we can reject the null hypothesis and conclude that there is a statistically significant association between the rankings.</li>
 </ol>
-<p>Here we got a p-value of approximately 0.056, which indicates that the association is marginally significant at the 0.05 level. This suggests that while there is a positive association between the rankings, we should be cautious in interpreting it as statistically significant. Why? Because our sample dataset is small (only 5 items), with a such a small number of pairs its more likely that random chance could produce similar levels of concordance. lets see what happens when we increase the size of the dataset.</p>
-</section>
-<section id="adding-complexity" class="level2">
-<h2 class="anchored" data-anchor-id="adding-complexity">Adding complexity</h2>
+<p>Here we got a p-value of approximately 0.056, which indicates that the association is marginally significant at the 0.05 level. This suggests that while there is a positive association between the rankings, we should be cautious in interpreting it as statistically significant. Why? <em>Because our sample dataset is small (only 5 items), with a such a small number of pairs its more likely that random chance could produce similar levels of concordance. lets see what happens when we increase the size of the dataset.</em></p>
+<p><strong>Adding complexity</strong></p>
 <p>To further explore the behavior of Kendall’s tau, we can increase the size of our dataset from 6 sites to 30. We will randomly generate base ranking, then create a slightly “noisy” version to simulate small differences in judgement or weight perturbations.</p>
 <div id="1988a13c" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">32</span>)  <span class="co"># for reproducibility</span></span>
@@ -765,29 +768,28 @@ Kendall's tau (manual calculation): 0.733</code></pre>
 </div>
 </div>
 <blockquote class="blockquote">
-<p>Next lets add noise a different way.</p>
+<p><strong>Next lets add noise a different way.</strong></p>
 </blockquote>
 <p>First we will create a set of data, we will call <em>base_scores</em> we will just take <span class="math inline">\(n\)</span> numbers spaced equally from 0 to 1</p>
 <p>then we will create alternative scores which are the base_scores with some noise added, noise from a random normal distribution.</p>
-<div id="9901761d" class="cell" data-execution_count="8">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> <span class="dv">19</span> <span class="co"># change this depending on the sample size you want</span></span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>noise_factor <span class="op">=</span> <span class="fl">0.08</span> <span class="co"># this is the standard devation of the distribution from which the noise is generated, try 0.1, 0.05, 1, see how this affects kendalls tau</span></span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>base_scores <span class="op">=</span> np.linspace(<span class="dv">0</span>,<span class="dv">1</span>,n)</span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="co">#print(f"base_scores {base_scores}")</span></span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>noise <span class="op">=</span> np.random.normal (<span class="dv">0</span>,noise_factor,n) <span class="co"># create noise by drawing random samples from a normal gaussian distribution</span></span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>alt_scores <span class="op">=</span> base_scores <span class="op">+</span> noise <span class="co"># add the noise to the base scores to create alternative scores</span></span>
-<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a><span class="co">#print(f"alt scores (base scores + noise) {alt_scores}")</span></span>
-<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>rank_base <span class="op">=</span> pd.Series(base_scores).rank() <span class="co"># rank the original scores, (remember we want ranks not scores)</span></span>
-<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>rank_alt <span class="op">=</span> pd.Series(alt_scores).rank() <span class="co"># the base scores have been changed a bit randomly so they will rank differently when their rank is calculated</span></span>
-<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a><span class="co"># now lets calculate kendall's tau</span></span>
-<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>tau, p_value <span class="op">=</span> kendalltau(rank_base, rank_alt)</span>
-<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"τ = </span><span class="sc">{</span>tau<span class="sc">:.3f}</span><span class="ss">; pvalue = </span><span class="sc">{</span>p_value<span class="sc">:.5f}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="9901761d" class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> <span class="dv">19</span> <span class="co"># change this depending on the sample size you want</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>noise_factor <span class="op">=</span> <span class="fl">0.08</span> <span class="co"># this is the standard devation of the distribution from which the noise is generated, try 0.1, 0.05, 1, see how this affects kendalls tau</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>base_scores <span class="op">=</span> np.linspace(<span class="dv">0</span>,<span class="dv">1</span>,n)</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="co">#print(f"base_scores {base_scores}")</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>noise <span class="op">=</span> np.random.normal (<span class="dv">0</span>,noise_factor,n) <span class="co"># create noise by drawing random samples from a normal gaussian distribution</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>alt_scores <span class="op">=</span> base_scores <span class="op">+</span> noise <span class="co"># add the noise to the base scores to create alternative scores</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="co">#print(f"alt scores (base scores + noise) {alt_scores}")</span></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>rank_base <span class="op">=</span> pd.Series(base_scores).rank() <span class="co"># rank the original scores, (remember we want ranks not scores)</span></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>rank_alt <span class="op">=</span> pd.Series(alt_scores).rank() <span class="co"># the base scores have been changed a bit randomly so they will rank differently when their rank is calculated</span></span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a><span class="co"># now lets calculate kendall's tau</span></span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>tau, p_value <span class="op">=</span> kendalltau(rank_base, rank_alt)</span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"τ = </span><span class="sc">{</span>tau<span class="sc">:.3f}</span><span class="ss">; pvalue = </span><span class="sc">{</span>p_value<span class="sc">:.5f}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>τ = 0.860; pvalue = 0.00000</code></pre>
 </div>
@@ -810,7 +812,7 @@ Kendall's tau (manual calculation): 0.733</code></pre>
 </div>
 </div>
 <blockquote class="blockquote">
-<p>Lets now look at how changing the level of noise in the data affects the kendalls tau</p>
+<p><strong>Lets now look at how changing the level of noise in the data affects the kendalls tau</strong></p>
 </blockquote>
 <p>We will generate many random pertubations and compute <span class="math inline">\(\tau\)</span> each time. This mimics the way sensitivity analysis samples random weight combinations in a Weighted Linear Combination (WLC). basically we are looking at the kendall’s tau through time, and automating the changing of the standard devation within the noise addition to see how adding different levels of noise affects kendall’s tau.</p>
 <div id="5ae34b9e" class="cell" data-execution_count="10">
@@ -840,19 +842,20 @@ Kendall's tau (manual calculation): 0.733</code></pre>
 </div>
 </div>
 <blockquote class="blockquote">
-<p>you can see from the above figure that as noise increases kendall’s tau a measure of similarity between rankings decreases, rank stability decreases.</p>
+<p><strong>you can see from the above figure that as noise increases kendall’s tau a measure of similarity between rankings decreases, rank stability decreases.</strong></p>
 </blockquote>
 </section>
 <section id="real-world-example---countries-ranked-by-life-expectency-and-gdp" class="level2">
 <h2 class="anchored" data-anchor-id="real-world-example---countries-ranked-by-life-expectency-and-gdp">real-world example - Countries Ranked by Life Expectency and GDP</h2>
 <p>Ok, enough with fake data sets, lets step away from the hard sciences for a second and look at something more social. Lets look at how life expectancy compares to GDP, we would think life expectancy is higher in rich countries and lower in poor countries. So we can get the data on life expectancy, and we can get the data on GDP, then rank the countries in order of GDP and life expectancy, and compare how these two different ways to rank countries are concordant or discordant using Kendalls Tau</p>
 <blockquote class="blockquote">
-<p>to see how we cleaned and created these datasets see this notebook: <code>Data\DataWranglingScripts\GDPvLifeExpectency2022_countries_ranked.ipynb</code></p>
+<p><strong>to see how we cleaned and created these datasets see this notebook:</strong> <code>Data\DataWranglingScripts\GDPvLifeExpectency2022_countries_ranked.ipynb</code></p>
 </blockquote>
-<div id="5e3fb85c" class="cell" data-execution_count="11">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">"../Data/CLEAN/GDP_LifeExpectancy_2022_Clean.csv"</span>)</span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df.head())</span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df.columns)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="5e3fb85c" class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># read in and inspect the data</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">"../Data/CLEAN/GDP_LifeExpectancy_2022_Clean.csv"</span>) <span class="co"># read in data as a data frame with pandas</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df.head()) <span class="co"># look at first 5 rows of data to see structure</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df.columns) <span class="co"># list the column names</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>                  Country Name Country Code   GDP_PC_2022  LIFE_EX_YRS_2022  \
 0                        Aruba          ABW  30559.533535         73.537000   
@@ -872,45 +875,46 @@ Index(['Country Name', 'Country Code', 'GDP_PC_2022', 'LIFE_EX_YRS_2022',
       dtype='object')</code></pre>
 </div>
 </div>
-<div id="948178cb" class="cell" data-execution_count="12">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>tau, pval <span class="op">=</span> kendalltau(df[<span class="st">"GDP_PC_RANK_2022"</span>], df[<span class="st">"LIFE_EX_YRS_RANK_2022"</span>])</span>
+<div id="948178cb" class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>tau, pval <span class="op">=</span> kendalltau(df[<span class="st">"GDP_PC_RANK_2022"</span>], df[<span class="st">"LIFE_EX_YRS_RANK_2022"</span>]) <span class="co"># evaluate the kendalls tau and extract pvalue</span></span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Kendall's tau (τ) = </span><span class="sc">{</span>tau<span class="sc">:.3f}</span><span class="ss">"</span>)</span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"p-value = </span><span class="sc">{</span>pval<span class="sc">:.8f}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Kendall's tau (τ) = </span><span class="sc">{</span>tau<span class="sc">:.3f}</span><span class="ss">"</span>) <span class="co"># print kendalls tau</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"p-value = </span><span class="sc">{</span>pval<span class="sc">:.8f}</span><span class="ss">"</span>) <span class="co"># print p-value </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Kendall's tau (τ) = 0.651
 p-value = 0.00000000</code></pre>
 </div>
 </div>
 <p>We see a strong positive rank correlation, which is what we would expect. Wealthier countries generally have longer life expectancy, though the relationship isnt perfect. Now lets visualize the data.</p>
-<div id="278273b9" class="cell" data-execution_count="13">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">7</span>,<span class="dv">7</span>))</span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>plt.scatter(</span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>    df[<span class="st">"GDP_PC_RANK_2022"</span>],</span>
-<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>    df[<span class="st">"LIFE_EX_YRS_RANK_2022"</span>],</span>
-<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>    alpha<span class="op">=</span><span class="fl">0.7</span>,</span>
-<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>    edgecolor<span class="op">=</span><span class="st">"k"</span>,</span>
-<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>    linewidth<span class="op">=</span><span class="fl">0.3</span></span>
-<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Add a diagonal "perfect agreement" line</span></span>
-<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>plt.plot(</span>
-<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a>    [<span class="dv">1</span>, df[<span class="st">"GDP_PC_RANK_2022"</span>].<span class="bu">max</span>()],</span>
-<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a>    [<span class="dv">1</span>, df[<span class="st">"LIFE_EX_YRS_RANK_2022"</span>].<span class="bu">max</span>()],</span>
-<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a>    <span class="st">'k--'</span>, alpha<span class="op">=</span><span class="fl">0.5</span>, label<span class="op">=</span><span class="st">"Perfect rank agreement"</span></span>
-<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-17"><a href="#cb21-17" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"GDP per capita rank (1 = richest)"</span>)</span>
-<span id="cb21-18"><a href="#cb21-18" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Life expectancy rank (1 = longest-lived)"</span>)</span>
-<span id="cb21-19"><a href="#cb21-19" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="ss">f"Country Rank Agreement</span><span class="ch">\n</span><span class="ss">Kendall’s τ = </span><span class="sc">{</span>tau<span class="sc">:.3f}</span><span class="ss">"</span>)</span>
-<span id="cb21-20"><a href="#cb21-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-21"><a href="#cb21-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Flip axes so 'better' (rank 1) appears top-right</span></span>
-<span id="cb21-22"><a href="#cb21-22" aria-hidden="true" tabindex="-1"></a>plt.gca().invert_xaxis()</span>
-<span id="cb21-23"><a href="#cb21-23" aria-hidden="true" tabindex="-1"></a>plt.gca().invert_yaxis()</span>
-<span id="cb21-24"><a href="#cb21-24" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
-<span id="cb21-25"><a href="#cb21-25" aria-hidden="true" tabindex="-1"></a>plt.grid(alpha<span class="op">=</span><span class="fl">0.3</span>)</span>
-<span id="cb21-26"><a href="#cb21-26" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
-<span id="cb21-27"><a href="#cb21-27" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="278273b9" class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># use matplot lib to plot these data</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">7</span>,<span class="dv">7</span>))</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>plt.scatter(</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>    df[<span class="st">"GDP_PC_RANK_2022"</span>],</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>    df[<span class="st">"LIFE_EX_YRS_RANK_2022"</span>],</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>    alpha<span class="op">=</span><span class="fl">0.7</span>,</span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>    edgecolor<span class="op">=</span><span class="st">"k"</span>,</span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>    linewidth<span class="op">=</span><span class="fl">0.3</span></span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Add a diagonal "perfect agreement" line</span></span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a>plt.plot(</span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a>    [<span class="dv">1</span>, df[<span class="st">"GDP_PC_RANK_2022"</span>].<span class="bu">max</span>()],</span>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a>    [<span class="dv">1</span>, df[<span class="st">"LIFE_EX_YRS_RANK_2022"</span>].<span class="bu">max</span>()],</span>
+<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a>    <span class="st">'k--'</span>, alpha<span class="op">=</span><span class="fl">0.5</span>, label<span class="op">=</span><span class="st">"Perfect rank agreement"</span></span>
+<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb21-17"><a href="#cb21-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-18"><a href="#cb21-18" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"GDP per capita rank (1 = richest)"</span>)</span>
+<span id="cb21-19"><a href="#cb21-19" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Life expectancy rank (1 = longest-lived)"</span>)</span>
+<span id="cb21-20"><a href="#cb21-20" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="ss">f"Country Rank Agreement</span><span class="ch">\n</span><span class="ss">Kendall’s τ = </span><span class="sc">{</span>tau<span class="sc">:.3f}</span><span class="ss">"</span>)</span>
+<span id="cb21-21"><a href="#cb21-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-22"><a href="#cb21-22" aria-hidden="true" tabindex="-1"></a><span class="co"># Flip axes so 'better' (rank 1) appears top-right</span></span>
+<span id="cb21-23"><a href="#cb21-23" aria-hidden="true" tabindex="-1"></a>plt.gca().invert_xaxis()</span>
+<span id="cb21-24"><a href="#cb21-24" aria-hidden="true" tabindex="-1"></a>plt.gca().invert_yaxis()</span>
+<span id="cb21-25"><a href="#cb21-25" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
+<span id="cb21-26"><a href="#cb21-26" aria-hidden="true" tabindex="-1"></a>plt.grid(alpha<span class="op">=</span><span class="fl">0.3</span>)</span>
+<span id="cb21-27"><a href="#cb21-27" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb21-28"><a href="#cb21-28" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -1003,9 +1007,8 @@ p-value = 0.02515424</code></pre>
 </div>
 </div>
 <p>The analysis of country rank in terms of GDP per capita vs life expectancy using Kendall’s tau tells us that overall life expectency is correlated with GDP per capita in terms of how contries compare to eachother (rank), however the correlation is much worse in the rich countries, why might that be?</p>
-</section>
-<section id="practice-questions" class="level2">
-<h2 class="anchored" data-anchor-id="practice-questions">Practice Questions</h2>
+<section id="practice-questions" class="level3">
+<h3 class="anchored" data-anchor-id="practice-questions">Practice Questions</h3>
 <ol type="1">
 <li>Is Kendall’s Tau a good way to measure the correlation of these two variables?</li>
 </ol>
@@ -1019,11 +1022,10 @@ p-value = 0.02515424</code></pre>
 <p><em>answer: Several potential reasons….once you have enough money to pay for healthcare and have access to good food, increases in GDP after a certain point stop increasing lifespan. Also with inequality growing, perhaps the per capita GDP is misleading perhaps median income might be a better metric than per capita GDP.</em></p>
 </blockquote>
 </section>
+</section>
 <section id="spatial-rank-correlation" class="level2">
 <h2 class="anchored" data-anchor-id="spatial-rank-correlation">Spatial Rank Correlation</h2>
-<blockquote class="blockquote">
-<p>Using Kendalls Tau for suitability mapping sensitivity Analysis</p>
-</blockquote>
+<p><strong>Using Kendalls Tau for suitability mapping sensitivity Analysis.</strong></p>
 <p>In a Weighted Linear Combination (WLC) or other GIS-MCDA, you often generate suitability rasters under different weighting schemes, e.g.:</p>
 <ul>
 <li><p>Scenario A: baseline weights (e.g., 40% slope, 30% soil, 30% rainfall)</p></li>

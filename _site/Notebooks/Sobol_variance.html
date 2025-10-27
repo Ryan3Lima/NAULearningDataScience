@@ -1,0 +1,1382 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.39">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Sobol’ Variance-Based Sensitivity Analysis – NAULearningDataScience</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script><script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../Notebooks/Morris_Elementary_Effects.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-e26003cea8cd680ca0c55a263523d882.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-8da5b4427184b79ecddefad3d342027e.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../Notebooks/Sobol_variance.html"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Sobol’ Variance-Based Sensitivity Analysis</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">NAULearningDataScience</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../Notebooks/Kendalls_tau.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Kendall rank correlation coefficient (Kendall’s tau)</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../Notebooks/Morris_Elementary_Effects.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Morris Sensitivity Analysis (Elementary Effects Method)</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../Notebooks/Sobol_variance.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Sobol’ Variance-Based Sensitivity Analysis</span></span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#historical-background" id="toc-historical-background" class="nav-link active" data-scroll-target="#historical-background">Historical Background</a></li>
+  <li><a href="#conceptual-overview" id="toc-conceptual-overview" class="nav-link" data-scroll-target="#conceptual-overview">Conceptual Overview</a></li>
+  <li><a href="#sobol-sensitivity-indices" id="toc-sobol-sensitivity-indices" class="nav-link" data-scroll-target="#sobol-sensitivity-indices">Sobol’ Sensitivity Indices</a></li>
+  <li><a href="#why-sobol-analysis-matters-in-ecohydrology" id="toc-why-sobol-analysis-matters-in-ecohydrology" class="nav-link" data-scroll-target="#why-sobol-analysis-matters-in-ecohydrology">Why Sobol’ Analysis Matters in Ecohydrology</a></li>
+  <li><a href="#relationship-to-morris" id="toc-relationship-to-morris" class="nav-link" data-scroll-target="#relationship-to-morris">Relationship to Morris</a></li>
+  <li><a href="#next-steps" id="toc-next-steps" class="nav-link" data-scroll-target="#next-steps">Next Steps</a></li>
+  <li><a href="#step-1-the-ishigami-function-building-intuition" id="toc-step-1-the-ishigami-function-building-intuition" class="nav-link" data-scroll-target="#step-1-the-ishigami-function-building-intuition">Step 1: The Ishigami Function — Building Intuition</a>
+  <ul class="collapse">
+  <li><a href="#key-properties" id="toc-key-properties" class="nav-link" data-scroll-target="#key-properties">Key properties</a></li>
+  </ul></li>
+  <li><a href="#step-1.1-visualizing-the-ishigami-function" id="toc-step-1.1-visualizing-the-ishigami-function" class="nav-link" data-scroll-target="#step-1.1-visualizing-the-ishigami-function">Step 1.1: Visualizing the Ishigami Function</a></li>
+  <li><a href="#step-2-estimating-sobol-indices-from-monte-carlo-samples" id="toc-step-2-estimating-sobol-indices-from-monte-carlo-samples" class="nav-link" data-scroll-target="#step-2-estimating-sobol-indices-from-monte-carlo-samples">Step 2: Estimating Sobol’ Indices from Monte Carlo Samples</a>
+  <ul class="collapse">
+  <li><a href="#core-idea" id="toc-core-idea" class="nav-link" data-scroll-target="#core-idea">Core idea</a></li>
+  </ul></li>
+  <li><a href="#step-2.1-interpreting-sobol-results" id="toc-step-2.1-interpreting-sobol-results" class="nav-link" data-scroll-target="#step-2.1-interpreting-sobol-results">Step 2.1: Interpreting Sobol’ Results</a>
+  <ul class="collapse">
+  <li><a href="#interpretation" id="toc-interpretation" class="nav-link" data-scroll-target="#interpretation">Interpretation</a></li>
+  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary">Summary</a></li>
+  <li><a href="#step-2.2-interpretation" id="toc-step-2.2-interpretation" class="nav-link" data-scroll-target="#step-2.2-interpretation">Step 2.2 Interpretation</a></li>
+  </ul></li>
+  <li><a href="#step-3-how-monte-carlo-sampling-is-used-in-sobol-sensitivity-analysis" id="toc-step-3-how-monte-carlo-sampling-is-used-in-sobol-sensitivity-analysis" class="nav-link" data-scroll-target="#step-3-how-monte-carlo-sampling-is-used-in-sobol-sensitivity-analysis">Step 3: How Monte Carlo Sampling is Used in Sobol’ Sensitivity Analysis</a>
+  <ul class="collapse">
+  <li><a href="#what-were-sampling-in-general" id="toc-what-were-sampling-in-general" class="nav-link" data-scroll-target="#what-were-sampling-in-general">3.1 What We’re Sampling in General</a></li>
+  <li><a href="#what-that-means-for-mcda" id="toc-what-that-means-for-mcda" class="nav-link" data-scroll-target="#what-that-means-for-mcda">3.2 What That Means for MCDA</a></li>
+  <li><a href="#using-monte-carlo-sampling-for-mcda" id="toc-using-monte-carlo-sampling-for-mcda" class="nav-link" data-scroll-target="#using-monte-carlo-sampling-for-mcda">3.3 Using Monte Carlo Sampling for MCDA</a></li>
+  <li><a href="#in-summary" id="toc-in-summary" class="nav-link" data-scroll-target="#in-summary">3.4 In Summary</a></li>
+  <li><a href="#intuition" id="toc-intuition" class="nav-link" data-scroll-target="#intuition">3.5 Intuition</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Sobol’ Variance-Based Sensitivity Analysis</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="historical-background" class="level3">
+<h3 class="anchored" data-anchor-id="historical-background">Historical Background</h3>
+<p>Variance-based sensitivity analysis was formalized by <strong>Ilya M. Sobol’</strong>, a Russian mathematician, in <strong>1990</strong>.<br>
+Sobol’ was working on uncertainty propagation in complex computational models, where small changes in inputs could lead to large, nonlinear changes in outputs.</p>
+<p>His key insight was that <strong>a model’s output variance can be decomposed into contributions from each input variable and their interactions</strong>.</p>
+<p>This approach built upon earlier ideas in <strong>ANOVA (Analysis of Variance)</strong> and <strong>factorial design</strong>, but extended them to arbitrary nonlinear, non-additive models.<br>
+Sobol’s work provided a rigorous, model-independent way to measure how much of the uncertainty in the model output can be attributed to uncertainty in each input.</p>
+<p>Today, the <strong>Sobol’ method</strong> (often misspelled “Sobel”) is a cornerstone of <strong>global sensitivity analysis (GSA)</strong> — used across hydrology, climatology, ecology, and environmental modeling.</p>
+<hr>
+</section>
+<section id="conceptual-overview" class="level3">
+<h3 class="anchored" data-anchor-id="conceptual-overview">Conceptual Overview</h3>
+<p>Consider a model:</p>
+<p><span class="math display">\[
+Y = f(X_1, X_2, \ldots, X_k)
+\]</span></p>
+<p>where each <span class="math inline">\(X_i\)</span> is an uncertain input variable with a known probability distribution,<br>
+and <span class="math inline">\(Y\)</span> is the scalar model output (e.g., recharge rate, runoff, or suitability index).</p>
+<p>The <strong>total output variance</strong> can be decomposed as:</p>
+<p><span class="math display">\[
+Var(Y) = \sum_i V_i + \sum_{i&lt;j} V_{ij} + \sum_{i&lt;j&lt;k} V_{ijk} + \cdots + V_{1,2,\ldots,k}
+\]</span></p>
+<p><strong>where:</strong></p>
+<ul>
+<li><p><span class="math inline">\(V_i = Var_{X_i}\big(E[Y|X_i]\big)\)</span> — the portion of output variance explained by input (X_i) alone (main effect),</p></li>
+<li><p><span class="math inline">\(V_{ij} = Var_{X_{i},X_{j}}\big(E[Y|X_i, X_j]\big) - V_i - V_j\)</span> — the variance explained by the <em>interaction</em> of <span class="math inline">\(X_i\)</span> and <span class="math inline">\(X_j\)</span>,</p></li>
+<li><p>and so on.</p></li>
+</ul>
+<p>Each of these terms represents how much of the output variance comes from each combination of inputs.</p>
+<hr>
+</section>
+<section id="sobol-sensitivity-indices" class="level3">
+<h3 class="anchored" data-anchor-id="sobol-sensitivity-indices">Sobol’ Sensitivity Indices</h3>
+<p>Sobol’ defined <strong>dimensionless indices</strong> that normalize these variance components:</p>
+<ul>
+<li><p><strong>First-order (main effect) index:</strong> <span class="math display">\[
+S_i = \frac{V_i}{Var(Y)}
+\]</span></p>
+<p>This measures the direct contribution of input <span class="math inline">\(X_i\)</span> to the output variance.</p></li>
+<li><p><strong>Second-order (interaction) index:</strong></p></li>
+</ul>
+<p><span class="math display">\[
+  S_{ij} = \frac{V_{ij}}{Var(Y)}
+\]</span></p>
+<p>This measures the contribution of the interaction between (X_i) and (X_j).</p>
+<ul>
+<li><p><strong>Total-order index:</strong> <span class="math display">\[
+S_{T_i} = 1 - \frac{Var_{X_{\sim i}}\big(E[Y|X_{\sim i}]\big)}{Var(Y)}
+\]</span></p>
+<p>or equivalently: <span class="math display">\[
+S_{T_i} = S_i + \sum_{j \ne i} S_{ij} + \sum_{j \ne i, k \ne i,j} S_{ijk} + \cdots
+\]</span></p>
+<p>This measures <strong>all</strong> effects involving <span class="math inline">\(X_i\)</span>, including its interactions.</p></li>
+</ul>
+<p>In short:</p>
+<ul>
+<li><span class="math inline">\(S_i\)</span> → how important a variable is <em>on its own</em><br>
+</li>
+<li><span class="math inline">\(S_{T_i}\)</span> → how important a variable is <em>in total</em> (including interactions)</li>
+</ul>
+<p>The sum of all first-order indices equals 1 only for purely additive models; otherwise, the difference <span class="math inline">\(1 - \sum_i S_i\)</span> quantifies total interaction strength.</p>
+<hr>
+</section>
+<section id="why-sobol-analysis-matters-in-ecohydrology" class="level3">
+<h3 class="anchored" data-anchor-id="why-sobol-analysis-matters-in-ecohydrology">Why Sobol’ Analysis Matters in Ecohydrology</h3>
+<p>In ecohydrological models, relationships are rarely linear — infiltration, evapotranspiration, and recharge often depend multiplicatively on multiple factors (soil, vegetation, slope, climate).<br>
+Sobol’ analysis helps to:</p>
+<ul>
+<li><strong>Rank inputs</strong> by how much they drive uncertainty in outputs.<br>
+</li>
+<li><strong>Detect interactions</strong> (e.g., rainfall × soil permeability).<br>
+</li>
+<li><strong>Assess model structure</strong> — whether the model is dominated by a few key variables or by complex nonlinear couplings.<br>
+</li>
+<li><strong>Guide data collection</strong> — focus effort on the variables with high Sobol’ indices.</li>
+</ul>
+<p>For example, in a groundwater recharge model, you might find that precipitation variability explains 60% of the variance in predicted recharge, but its total index is 0.9 — meaning interactions (with soil or vegetation) amplify its role.</p>
+<hr>
+</section>
+<section id="relationship-to-morris" class="level3">
+<h3 class="anchored" data-anchor-id="relationship-to-morris">Relationship to Morris</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 15%">
+<col style="width: 64%">
+<col style="width: 20%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Feature</th>
+<th style="text-align: left;">Morris Method</th>
+<th style="text-align: left;">Sobol’ Method</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Type</td>
+<td style="text-align: left;">Qualitative / Screening</td>
+<td style="text-align: left;">Quantitative / Global</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Metric</td>
+<td style="text-align: left;">Mean <span class="math inline">\(\mu^*\)</span> and std <span class="math inline">\(\sigma\)</span> of elementary effects</td>
+<td style="text-align: left;">Variance decomposition</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Sampling</td>
+<td style="text-align: left;">Trajectory-based (few hundred runs)</td>
+<td style="text-align: left;">Monte Carlo or quasi–Monte Carlo (thousands of runs)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Output</td>
+<td style="text-align: left;">Relative importance, nonlinearity indication</td>
+<td style="text-align: left;">Fraction of total variance explained</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Strength</td>
+<td style="text-align: left;">Low-cost first-pass screening</td>
+<td style="text-align: left;">Precise quantification of global sensitivity</td>
+</tr>
+</tbody>
+</table>
+<p>Sobol’ is typically applied <strong>after</strong> Morris identifies which inputs merit deeper investigation.</p>
+<hr>
+</section>
+<section id="next-steps" class="level3">
+<h3 class="anchored" data-anchor-id="next-steps">Next Steps</h3>
+<p>In the next sections, we will:</p>
+<ol type="1">
+<li><p>Build intuition using simple synthetic functions (e.g., the Ishigami function).</p></li>
+<li><p>Compute Sobol’ indices from first principles (step-by-step variance decomposition).</p></li>
+<li><p>Compare results with <code>SALib</code> implementations for verification.</p></li>
+<li><p>Visualize the indices and interpret them in the context of ecohydrological or spatial decision models.</p></li>
+</ol>
+</section>
+<section id="step-1-the-ishigami-function-building-intuition" class="level2">
+<h2 class="anchored" data-anchor-id="step-1-the-ishigami-function-building-intuition">Step 1: The Ishigami Function — Building Intuition</h2>
+<p>The <strong>Ishigami function</strong> is a well-known test case in sensitivity analysis because it includes both strong <strong>nonlinear</strong> effects and <strong>interactions</strong> between variables.</p>
+<p><strong>It is defined as:</strong></p>
+<p><span class="math display">\[
+f(x_1, x_2, x_3) = \sin(x_1) + a \sin^2(x_2) + b x_3^4 \sin(x_1)
+\]</span></p>
+<p>Typical parameter values are <span class="math inline">\(a = 7\)</span> and <span class="math inline">\(b = 0.1\)</span>.<br>
+Each <span class="math inline">\(x_i\)</span> is drawn uniformly from <span class="math inline">\([-π, π]\)</span>.</p>
+<section id="key-properties" class="level3">
+<h3 class="anchored" data-anchor-id="key-properties">Key properties</h3>
+<ul>
+<li><span class="math inline">\(x_1\)</span> affects <span class="math inline">\(Y\)</span> nonlinearly through <span class="math inline">\(\sin(x_1)\)</span>.</li>
+<li><span class="math inline">\(x_2\)</span> affects <span class="math inline">\(Y\)</span> only through <span class="math inline">\(\sin^2(x_2)\)</span>.</li>
+<li><span class="math inline">\(x_3\)</span> interacts <strong>only</strong> with <span class="math inline">\(x_1\)</span> (via <span class="math inline">\(b x_3^4 \sin(x_1)\)</span>).</li>
+<li>Thus, <span class="math inline">\(x_3\)</span> has <strong>no main effect</strong> but a <strong>strong interaction effect</strong>.</li>
+</ul>
+<p>The known analytical Sobol’ indices (for <span class="math inline">\(a = 7, b = 0.1\)</span>) are:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Parameter</th>
+<th style="text-align: left;"><span class="math inline">\(S_i\)</span> (First-order)</th>
+<th style="text-align: left;"><span class="math inline">\(S_{T_i}\)</span> (Total-order)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">\(x_1\)</span></td>
+<td style="text-align: left;">0.314</td>
+<td style="text-align: left;">0.558</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="math inline">\(x_2\)</span></td>
+<td style="text-align: left;">0.442</td>
+<td style="text-align: left;">0.442</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">\(x_3\)</span></td>
+<td style="text-align: left;">0.000</td>
+<td style="text-align: left;">0.244</td>
+</tr>
+</tbody>
+</table>
+<p>You can see that: - <span class="math inline">\(x_2\)</span> drives much of the output variance directly. - <span class="math inline">\(x_3\)</span> matters <strong>only</strong> through its interaction with <span class="math inline">\(x_1\)</span>. - The gap between <span class="math inline">\(S_i\)</span> and <span class="math inline">\(S_{T_i}\)</span> indicates <strong>interaction strength</strong>.</p>
+<div id="3636362c" class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 1: Define and explore the Ishigami function</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Define Ishigami function</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> ishigami(x1, x2, x3, a<span class="op">=</span><span class="dv">7</span>, b<span class="op">=</span><span class="fl">0.1</span>):</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.sin(x1) <span class="op">+</span> a <span class="op">*</span> np.sin(x2)<span class="op">**</span><span class="dv">2</span> <span class="op">+</span> b <span class="op">*</span> x3<span class="op">**</span><span class="dv">4</span> <span class="op">*</span> np.sin(x1)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Sample inputs</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>N <span class="op">=</span> <span class="dv">5000</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>x1 <span class="op">=</span> np.random.uniform(<span class="op">-</span>np.pi, np.pi, N)</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>x2 <span class="op">=</span> np.random.uniform(<span class="op">-</span>np.pi, np.pi, N)</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>x3 <span class="op">=</span> np.random.uniform(<span class="op">-</span>np.pi, np.pi, N)</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute model output</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> ishigami(x1, x2, x3)</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Quick summary</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>pd.DataFrame({</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>    <span class="st">"mean"</span>: [y.mean()],</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>    <span class="st">"variance"</span>: [y.var()],</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>    <span class="st">"min"</span>: [y.<span class="bu">min</span>()],</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>    <span class="st">"max"</span>: [y.<span class="bu">max</span>()]</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">mean</th>
+<th data-quarto-table-cell-role="th">variance</th>
+<th data-quarto-table-cell-role="th">min</th>
+<th data-quarto-table-cell-role="th">max</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>3.432564</td>
+<td>13.580454</td>
+<td>-10.022532</td>
+<td>17.060055</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="step-1.1-visualizing-the-ishigami-function" class="level2">
+<h2 class="anchored" data-anchor-id="step-1.1-visualizing-the-ishigami-function">Step 1.1: Visualizing the Ishigami Function</h2>
+<p>The Ishigami function lives in a three-dimensional input space (<span class="math inline">\(x_1, x_2, x_3 \in [-\pi, \pi]\)</span>),<br>
+so we often visualize it using 2D slices.</p>
+<p>Below, we: - Fix <span class="math inline">\(x_3 = 0\)</span> to examine the main nonlinear contributions from <span class="math inline">\(x_1\)</span> and <span class="math inline">\(x_2\)</span>. - Then show 1D cross-sections for each variable to highlight how <span class="math inline">\(f(x)\)</span> responds when others are fixed.</p>
+<p>These visualizations help reveal: - Strong nonlinearity in <span class="math inline">\(x_1\)</span> and <span class="math inline">\(x_2\)</span>, - Interactions introduced by <span class="math inline">\(x_3\)</span>.</p>
+<div id="b38237aa" class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 1.1: Visualize the Ishigami function</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> mpl_toolkits.mplot3d <span class="im">import</span> Axes3D</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Define ranges for x1 and x2</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> <span class="dv">200</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>x1_vals <span class="op">=</span> np.linspace(<span class="op">-</span>np.pi, np.pi, n)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>x2_vals <span class="op">=</span> np.linspace(<span class="op">-</span>np.pi, np.pi, n)</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>X1, X2 <span class="op">=</span> np.meshgrid(x1_vals, x2_vals)</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Fix x3 = 0</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>Y <span class="op">=</span> ishigami(X1, X2, <span class="dv">0</span>)</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="co"># --- 3D surface plot ---</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>,<span class="dv">6</span>))</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> fig.add_subplot(<span class="dv">111</span>, projection<span class="op">=</span><span class="st">"3d"</span>)</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>surf <span class="op">=</span> ax.plot_surface(X1, X2, Y, cmap<span class="op">=</span><span class="st">"viridis"</span>, linewidth<span class="op">=</span><span class="dv">0</span>, antialiased<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>ax.set_xlabel(<span class="st">"$x_1$"</span>)</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">"$x_2$"</span>)</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>ax.set_zlabel(<span class="st">"$f(x_1, x_2, 0)$"</span>)</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">"Ishigami Function Surface ($x_3 = 0$)"</span>)</span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>fig.colorbar(surf, ax<span class="op">=</span>ax, shrink<span class="op">=</span><span class="fl">0.5</span>, aspect<span class="op">=</span><span class="dv">10</span>)</span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a><span class="co"># --- 1D slices for intuition ---</span></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.linspace(<span class="op">-</span>np.pi, np.pi, <span class="dv">400</span>)</span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">3</span>, figsize<span class="op">=</span>(<span class="dv">14</span>,<span class="dv">4</span>))</span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">0</span>].plot(x, ishigami(x, <span class="dv">0</span>, <span class="dv">0</span>))</span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">0</span>].set_title(<span class="st">"$x_1$ effect (x2=0, x3=0)"</span>)</span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">0</span>].set_xlabel(<span class="st">"$x_1$"</span>)</span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">0</span>].set_ylabel(<span class="st">"$f$"</span>)</span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">1</span>].plot(x, ishigami(<span class="dv">0</span>, x, <span class="dv">0</span>))</span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">1</span>].set_title(<span class="st">"$x_2$ effect (x1=0, x3=0)"</span>)</span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">1</span>].set_xlabel(<span class="st">"$x_2$"</span>)</span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">1</span>].set_ylabel(<span class="st">"$f$"</span>)</span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">2</span>].plot(x, ishigami(<span class="dv">0</span>, <span class="dv">0</span>, x))</span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">2</span>].set_title(<span class="st">"$x_3$ effect (x1=0, x2=0)$"</span>)</span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">2</span>].set_xlabel(<span class="st">"$x_3$"</span>)</span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">2</span>].set_ylabel(<span class="st">"$f$"</span>)</span>
+<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Sobol_variance_files/figure-html/cell-3-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Sobol_variance_files/figure-html/cell-3-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="step-2-estimating-sobol-indices-from-monte-carlo-samples" class="level2">
+<h2 class="anchored" data-anchor-id="step-2-estimating-sobol-indices-from-monte-carlo-samples">Step 2: Estimating Sobol’ Indices from Monte Carlo Samples</h2>
+<p>Sobol’ sensitivity analysis is based on decomposing the variance of the model output</p>
+<p><span class="math display">\[
+Y = f(X_1, X_2, \ldots, X_k)
+\]</span></p>
+<p>into contributions from each input and their interactions.</p>
+<p>We will estimate: - the <strong>first-order index</strong> <span class="math inline">\(S_i\)</span>, which measures how much of the output variance can be explained by input <span class="math inline">\(X_i\)</span> alone; - and the <strong>total-order index</strong> <span class="math inline">\(S_{T_i}\)</span>, which measures how much of the output variance is associated with <span class="math inline">\(X_i\)</span>, including all its interactions.</p>
+<p>We will do this using Monte Carlo sampling and a standard Sobol’ estimator based on two sample matrices.</p>
+<section id="core-idea" class="level3">
+<h3 class="anchored" data-anchor-id="core-idea">Core idea</h3>
+<ol type="1">
+<li><p>Draw two independent random matrices <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span>, each of shape <span class="math inline">\((N, k)\)</span>.<br>
+Each row is one random draw of all inputs.</p></li>
+<li><p>For each input <span class="math inline">\(X_i\)</span>, build a hybrid matrix <span class="math inline">\(A_B^{(i)}\)</span> by:</p>
+<ul>
+<li>taking all columns from <span class="math inline">\(A\)</span> except column <span class="math inline">\(i\)</span>, which we take from <span class="math inline">\(B\)</span>.</li>
+</ul>
+<p>So <span class="math inline">\(A_B^{(i)}\)</span> is “mostly A, but with <span class="math inline">\(X_i\)</span> from <span class="math inline">\(B\)</span>.”</p></li>
+<li><p>Evaluate the model <span class="math inline">\(f\)</span> on:</p>
+<ul>
+<li>all rows of <span class="math inline">\(A\)</span> → call that <span class="math inline">\(f(A)\)</span></li>
+<li>all rows of <span class="math inline">\(B\)</span> → call that <span class="math inline">\(f(B)\)</span></li>
+<li>all rows of each <span class="math inline">\(A_B^{(i)}\)</span> → call that <span class="math inline">\(f(A_B^{(i)})\)</span></li>
+</ul></li>
+</ol>
+<p>From these evaluations, we can estimate:</p>
+<ul>
+<li>Total output variance:</li>
+</ul>
+<p><span class="math display">\[
+  V = Var(Y) \approx Var\big(f(A)\big)
+\]</span></p>
+<ul>
+<li>First-order Sobol’ index for input (X_i):</li>
+</ul>
+<p><span class="math display">\[
+  S_i \approx
+  \frac{
+    \frac{1}{N} \sum_{n=1}^N f(B)_n \, f(A_B^{(i)})_n \;-\;
+    \left(\frac{1}{N} \sum_{n=1}^N f(A)_n \right)^2
+  }{
+    Var(f(A))
+  }
+\]</span></p>
+<p>Intuition: this measures how much knowing (X_i) alone reduces uncertainty in the output.</p>
+<ul>
+<li>Total-order Sobol’ index for input (X_i):</li>
+</ul>
+<p><span class="math display">\[
+  S_{T_i} \approx
+  \frac{
+    \frac{1}{N} \sum_{n=1}^N
+      \left( f(A)_n - f(A_B^{(i)})_n \right)^2
+    \bigg/ 2
+  }{
+    Var(f(A))
+  }
+  \]</span></p>
+<p>Intuition: this measures how much the output would vary if we were to randomize <span class="math inline">\(X_i\)</span> while holding all other inputs fixed. High <span class="math inline">\(S_{T_i}\)</span> means <span class="math inline">\(X_i\)</span> matters either directly or through interactions.</p>
+<p>In this step, we will:</p>
+<ul>
+<li>generate A and B,</li>
+<li>build the hybrid matrices,</li>
+<li>compute <span class="math inline">\(S_i\)</span> and <span class="math inline">\(S_{T_i}\)</span> for the Ishigami function.</li>
+</ul>
+<div id="22077c06" class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># We'll reuse ishigami() from earlier</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> ishigami(x1, x2, x3, a<span class="op">=</span><span class="dv">7</span>, b<span class="op">=</span><span class="fl">0.1</span>):</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.sin(x1) <span class="op">+</span> a <span class="op">*</span> np.sin(x2)<span class="op">**</span><span class="dv">2</span> <span class="op">+</span> b <span class="op">*</span> x3<span class="op">**</span><span class="dv">4</span> <span class="op">*</span> np.sin(x1)</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. sampling setup</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> sample_inputs(N):</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    <span class="co"># each Xi ~ Uniform[-pi, pi]</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.random.uniform(<span class="op">-</span>np.pi, np.pi, size<span class="op">=</span>(N, <span class="dv">3</span>))</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. helper to evaluate f row-wise</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> eval_model(X):</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>    <span class="co"># X is shape (N,3) with columns [x1, x2, x3]</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> ishigami(X[:,<span class="dv">0</span>], X[:,<span class="dv">1</span>], X[:,<span class="dv">2</span>])</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. build A, B and hybrid matrices A_B^(i)</span></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> sobol_indices_ishigami(N<span class="op">=</span><span class="dv">10000</span>, seed<span class="op">=</span><span class="dv">0</span>):</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>    rng <span class="op">=</span> np.random.default_rng(seed)</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Draw two independent input matrices A and B</span></span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>    A <span class="op">=</span> rng.uniform(<span class="op">-</span>np.pi, np.pi, size<span class="op">=</span>(N, <span class="dv">3</span>))</span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>    B <span class="op">=</span> rng.uniform(<span class="op">-</span>np.pi, np.pi, size<span class="op">=</span>(N, <span class="dv">3</span>))</span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Evaluate model at A and B</span></span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>    fA <span class="op">=</span> eval_model(A)</span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>    fB <span class="op">=</span> eval_model(B)</span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Variance of the output (denominator for normalization)</span></span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>    VY <span class="op">=</span> np.var(fA, ddof<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a>    <span class="co"># estimate mean(fA) and mean(fB) - we mostly use mean(fA)</span></span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a>    fA_mean <span class="op">=</span> np.mean(fA)</span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a>    S_first <span class="op">=</span> []</span>
+<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a>    S_total <span class="op">=</span> []</span>
+<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">3</span>):  <span class="co"># for each input x1, x2, x3</span></span>
+<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Construct A_B^(i): all columns from A except column i from B</span></span>
+<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a>        A_Bi <span class="op">=</span> A.copy()</span>
+<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a>        A_Bi[:, i] <span class="op">=</span> B[:, i]</span>
+<span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a>        fABi <span class="op">=</span> eval_model(A_Bi)</span>
+<span id="cb3-46"><a href="#cb3-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-47"><a href="#cb3-47" aria-hidden="true" tabindex="-1"></a>        <span class="co"># First-order index estimator (Sobol 1993-style / Saltelli 2002 variant)</span></span>
+<span id="cb3-48"><a href="#cb3-48" aria-hidden="true" tabindex="-1"></a>        <span class="co"># S_i = [ E( f(B) * f(A_Bi) ) - (E f(A))^2 ] / Var(f(A))</span></span>
+<span id="cb3-49"><a href="#cb3-49" aria-hidden="true" tabindex="-1"></a>        numerator_first <span class="op">=</span> np.mean(fB <span class="op">*</span> fABi) <span class="op">-</span> (fA_mean <span class="op">**</span> <span class="dv">2</span>)</span>
+<span id="cb3-50"><a href="#cb3-50" aria-hidden="true" tabindex="-1"></a>        S_i <span class="op">=</span> numerator_first <span class="op">/</span> VY</span>
+<span id="cb3-51"><a href="#cb3-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-52"><a href="#cb3-52" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Total-order index estimator</span></span>
+<span id="cb3-53"><a href="#cb3-53" aria-hidden="true" tabindex="-1"></a>        <span class="co"># S_Ti = E[ (f(A) - f(A_Bi))^2 ] / (2 Var(f(A)))</span></span>
+<span id="cb3-54"><a href="#cb3-54" aria-hidden="true" tabindex="-1"></a>        numerator_total <span class="op">=</span> np.mean((fA <span class="op">-</span> fABi)<span class="op">**</span><span class="dv">2</span>) <span class="op">/</span> <span class="fl">2.0</span></span>
+<span id="cb3-55"><a href="#cb3-55" aria-hidden="true" tabindex="-1"></a>        S_Ti <span class="op">=</span> numerator_total <span class="op">/</span> VY</span>
+<span id="cb3-56"><a href="#cb3-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-57"><a href="#cb3-57" aria-hidden="true" tabindex="-1"></a>        S_first.append(S_i)</span>
+<span id="cb3-58"><a href="#cb3-58" aria-hidden="true" tabindex="-1"></a>        S_total.append(S_Ti)</span>
+<span id="cb3-59"><a href="#cb3-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-60"><a href="#cb3-60" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Pack into a DataFrame for readability</span></span>
+<span id="cb3-61"><a href="#cb3-61" aria-hidden="true" tabindex="-1"></a>    df <span class="op">=</span> pd.DataFrame({</span>
+<span id="cb3-62"><a href="#cb3-62" aria-hidden="true" tabindex="-1"></a>        <span class="st">"S_first"</span>: S_first,</span>
+<span id="cb3-63"><a href="#cb3-63" aria-hidden="true" tabindex="-1"></a>        <span class="st">"S_total"</span>: S_total</span>
+<span id="cb3-64"><a href="#cb3-64" aria-hidden="true" tabindex="-1"></a>    }, index<span class="op">=</span>[<span class="st">"x1"</span>, <span class="st">"x2"</span>, <span class="st">"x3"</span>])</span>
+<span id="cb3-65"><a href="#cb3-65" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-66"><a href="#cb3-66" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> df, VY, fA_mean</span>
+<span id="cb3-67"><a href="#cb3-67" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-68"><a href="#cb3-68" aria-hidden="true" tabindex="-1"></a>sobol_df, varY_est, meanY_est <span class="op">=</span> sobol_indices_ishigami(N<span class="op">=</span><span class="dv">10000</span>, seed<span class="op">=</span><span class="dv">123</span>)</span>
+<span id="cb3-69"><a href="#cb3-69" aria-hidden="true" tabindex="-1"></a>sobol_df, varY_est, meanY_est</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="3">
+<pre><code>(     S_first   S_total
+ x1  0.372584  0.565666
+ x2  0.479521  0.450329
+ x3  0.034654  0.242630,
+ np.float64(13.520042661023068),
+ np.float64(3.4746897059341726))</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="step-2.1-interpreting-sobol-results" class="level2">
+<h2 class="anchored" data-anchor-id="step-2.1-interpreting-sobol-results">Step 2.1: Interpreting Sobol’ Results</h2>
+<p>Our Monte Carlo estimates for the Ishigami function are:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Variable</th>
+<th style="text-align: center;"><span class="math inline">\(S_i\)</span> (First-order)</th>
+<th style="text-align: center;"><span class="math inline">\(S_{T_i}\)</span> (Total-order)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">\(x_1\)</span></td>
+<td style="text-align: center;">0.373</td>
+<td style="text-align: center;">0.566</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="math inline">\(x_2\)</span></td>
+<td style="text-align: center;">0.480</td>
+<td style="text-align: center;">0.450</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">\(x_3\)</span></td>
+<td style="text-align: center;">0.035</td>
+<td style="text-align: center;">0.243</td>
+</tr>
+</tbody>
+</table>
+<p>Estimated output variance: <span class="math inline">\(V_Y \approx 13.52\)</span><br>
+Estimated output mean: <span class="math inline">\(\bar{Y} \approx 3.47\)</span></p>
+<section id="interpretation" class="level3">
+<h3 class="anchored" data-anchor-id="interpretation">Interpretation</h3>
+<ul>
+<li><strong><span class="math inline">\(S_i\)</span> (first-order index)</strong> measures how much of the total variance in the model output can be explained by that variable alone, <em>holding all others constant</em>.<br>
+</li>
+<li><strong><span class="math inline">\(S_{T_i}\)</span> (total-order index)</strong> measures how much of the variance is due to that variable, <em>including its interactions with others</em>.</li>
+</ul>
+<p>From the table:</p>
+<ul>
+<li><p><span class="math inline">\(x_1\)</span> shows a <strong>strong direct effect</strong> (<span class="math inline">\(S_1 = 0.37\)</span>) and a <strong>moderate interaction</strong> (<span class="math inline">\(S_{T_1} - S_1 \approx 0.19\)</span>).<br>
+→ It influences <span class="math inline">\(Y\)</span> both directly and through its interaction with <span class="math inline">\(x_3\)</span>.</p></li>
+<li><p><span class="math inline">\(x_2\)</span> has the <strong>largest first-order effect</strong> (<span class="math inline">\(S_2 = 0.48\)</span>) and nearly identical total-order value.<br>
+→ This means <span class="math inline">\(x_2\)</span> acts <strong>independently</strong>—it explains much of the variance by itself, with little interaction.</p></li>
+<li><p><span class="math inline">\(x_3\)</span> has a <strong>small first-order effect</strong> but a <strong>large interaction component</strong> (<span class="math inline">\(S_{T_3} - S_3 \approx 0.21\)</span>).<br>
+→ It matters primarily <em>through its interaction</em> with <span class="math inline">\(x_1\)</span> in the term <span class="math inline">\(b x_3^4 \sin(x_1)\)</span>.</p></li>
+</ul>
+</section>
+<section id="summary" class="level3">
+<h3 class="anchored" data-anchor-id="summary">Summary</h3>
+<ul>
+<li>The Ishigami function confirms that:
+<ul>
+<li><span class="math inline">\(x_2\)</span> is the <strong>dominant independent variable</strong>.<br>
+</li>
+<li><span class="math inline">\(x_1\)</span> has both main and interactive effects.<br>
+</li>
+<li><span class="math inline">\(x_3\)</span> is <strong>purely interactive</strong>, affecting <span class="math inline">\(Y\)</span> only through coupling with <span class="math inline">\(x_1\)</span>.</li>
+</ul></li>
+<li>The small differences between analytical and simulated results arise from sampling error in Monte Carlo estimation.</li>
+</ul>
+<p>Next, we’ll <strong>visualize these results</strong> using a side-by-side bar plot to clearly compare <span class="math inline">\(S_i\)</span> and <span class="math inline">\(S_{T_i}\)</span> for each variable.</p>
+<div id="63f16951" class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Step 2.2: Visualizing first-order and total-order Sobol' indices</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">7</span>,<span class="dv">5</span>))</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co"># set bar width and x positions</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>bar_width <span class="op">=</span> <span class="fl">0.35</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.arange(<span class="bu">len</span>(sobol_df.index))</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="co"># bars for S_first and S_total</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>ax.bar(x <span class="op">-</span> bar_width<span class="op">/</span><span class="dv">2</span>, sobol_df[<span class="st">"S_first"</span>], width<span class="op">=</span>bar_width, label<span class="op">=</span><span class="vs">r"$S_i$ (First-order)"</span>, color<span class="op">=</span><span class="st">"#1f77b4"</span>)</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>ax.bar(x <span class="op">+</span> bar_width<span class="op">/</span><span class="dv">2</span>, sobol_df[<span class="st">"S_total"</span>], width<span class="op">=</span>bar_width, label<span class="op">=</span><span class="vs">r"$S_</span><span class="sc">{T_i}</span><span class="vs">$ (Total-order)"</span>, color<span class="op">=</span><span class="st">"#ff7f0e"</span>)</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="co"># axis and title formatting</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>ax.set_xticks(x)</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>ax.set_xticklabels(sobol_df.index, fontsize<span class="op">=</span><span class="dv">12</span>)</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>ax.set_ylabel(<span class="st">"Sobol' index"</span>, fontsize<span class="op">=</span><span class="dv">12</span>)</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">"Sobol' Sensitivity Indices for the Ishigami Function"</span>, fontsize<span class="op">=</span><span class="dv">13</span>, pad<span class="op">=</span><span class="dv">15</span>)</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>ax.legend(frameon<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Add text labels above bars</span></span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(x)):</span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>    ax.text(x[i] <span class="op">-</span> bar_width<span class="op">/</span><span class="dv">2</span>, sobol_df[<span class="st">"S_first"</span>].iloc[i] <span class="op">+</span> <span class="fl">0.02</span>, <span class="ss">f"</span><span class="sc">{</span>sobol_df[<span class="st">'S_first'</span>]<span class="sc">.</span>iloc[i]<span class="sc">:.2f}</span><span class="ss">"</span>,</span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>            ha<span class="op">=</span><span class="st">'center'</span>, va<span class="op">=</span><span class="st">'bottom'</span>, fontsize<span class="op">=</span><span class="dv">10</span>, color<span class="op">=</span><span class="st">'black'</span>)</span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>    ax.text(x[i] <span class="op">+</span> bar_width<span class="op">/</span><span class="dv">2</span>, sobol_df[<span class="st">"S_total"</span>].iloc[i] <span class="op">+</span> <span class="fl">0.02</span>, <span class="ss">f"</span><span class="sc">{</span>sobol_df[<span class="st">'S_total'</span>]<span class="sc">.</span>iloc[i]<span class="sc">:.2f}</span><span class="ss">"</span>,</span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>            ha<span class="op">=</span><span class="st">'center'</span>, va<span class="op">=</span><span class="st">'bottom'</span>, fontsize<span class="op">=</span><span class="dv">10</span>, color<span class="op">=</span><span class="st">'black'</span>)</span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>ax.set_ylim(<span class="dv">0</span>, <span class="bu">max</span>(sobol_df[<span class="st">"S_total"</span>].<span class="bu">max</span>(), sobol_df[<span class="st">"S_first"</span>].<span class="bu">max</span>()) <span class="op">+</span> <span class="fl">0.1</span>)</span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>ax.grid(axis<span class="op">=</span><span class="st">'y'</span>, alpha<span class="op">=</span><span class="fl">0.3</span>)</span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Sobol_variance_files/figure-html/cell-5-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="step-2.2-interpretation" class="level3">
+<h3 class="anchored" data-anchor-id="step-2.2-interpretation">Step 2.2 Interpretation</h3>
+<p>In the bar plot below:</p>
+<ul>
+<li>The <strong>blue bars</strong> (<span class="math inline">\(S_i\)</span>) represent how much variance each input explains on its own (main effects).</li>
+<li>The <strong>orange bars</strong> (<span class="math inline">\(S_{T_i}\)</span>) show how much variance each input contributes including interactions.</li>
+</ul>
+<p>From the Ishigami function:</p>
+<ul>
+<li><span class="math inline">\(x_2\)</span> dominates the variance as an independent factor.</li>
+<li><span class="math inline">\(x_1\)</span> has a strong main effect but also interacts with <span class="math inline">\(x_3\)</span>.</li>
+<li><span class="math inline">\(x_3\)</span> barely contributes on its own but has a notable interaction effect—this is classic Ishigami behavior.</li>
+</ul>
+<p>When <span class="math inline">\(S_{T_i} - S_i\)</span> is large, it signals <strong>non-additivity</strong> or <strong>interaction</strong> in the model’s response surface.</p>
+</section>
+</section>
+<section id="step-3-how-monte-carlo-sampling-is-used-in-sobol-sensitivity-analysis" class="level2">
+<h2 class="anchored" data-anchor-id="step-3-how-monte-carlo-sampling-is-used-in-sobol-sensitivity-analysis">Step 3: How Monte Carlo Sampling is Used in Sobol’ Sensitivity Analysis</h2>
+<p>Monte Carlo (MC) sampling is the engine that powers Sobol’s method.<br>
+Sobol’ indices are <em>variance-based</em>, which means they quantify <strong>how much of the variance in a model’s output</strong> is due to uncertainty (or variability) in each of its inputs.</p>
+<p>But to estimate those variances and covariances, we need <em>many</em> realizations of the model.<br>
+That’s where Monte Carlo sampling comes in.</p>
+<hr>
+<section id="what-were-sampling-in-general" class="level3">
+<h3 class="anchored" data-anchor-id="what-were-sampling-in-general">3.1 What We’re Sampling in General</h3>
+<p>In the Sobol’ framework, we treat each model input as a <strong>random variable</strong> with a specified distribution. For a model:</p>
+<p><span class="math display">\[
+Y = f(X_1, X_2, \ldots, X_k)
+\]</span></p>
+<p>we define a joint input distribution:</p>
+<p><span class="math display">\[
+(X_1, X_2, \ldots, X_k) \sim p(X)
+\]</span></p>
+<p>Monte Carlo sampling simply means: - drawing many random combinations of inputs from <span class="math inline">\(p(X)\)</span>, - running the model <span class="math inline">\(f\)</span> for each sample, - and then analyzing how changes in each <span class="math inline">\(X_i\)</span> influence the distribution of <span class="math inline">\(Y\)</span>.</p>
+<p>From these samples, we can estimate: - the total output variance <span class="math inline">\(Var(Y)\)</span>, - and how much of that variance is attributable to each input or combination of inputs.</p>
+<hr>
+</section>
+<section id="what-that-means-for-mcda" class="level3">
+<h3 class="anchored" data-anchor-id="what-that-means-for-mcda">3.2 What That Means for MCDA</h3>
+<p>In <strong>multi-criteria decision analysis (MCDA)</strong>, our “model” often looks like this:</p>
+<p><span class="math display">\[
+S = \sum_{i=1}^{k} w_i \, x_i
+\]</span></p>
+<p>where: - <span class="math inline">\(x_i\)</span> are <strong>normalized criterion layers</strong> (e.g., slope, soil permeability, land cover suitability), - <span class="math inline">\(w_i\)</span> are <strong>weights</strong> representing the relative importance of each criterion, - and <span class="math inline">\(S\)</span> is the resulting <strong>suitability score</strong> (often a raster).</p>
+<p>So the MCDA suitability map is a deterministic function:</p>
+<p><span class="math display">\[
+S = f(w_1, w_2, \ldots, w_k)
+\]</span></p>
+<p>where the “inputs” are the weights.</p>
+<hr>
+</section>
+<section id="using-monte-carlo-sampling-for-mcda" class="level3">
+<h3 class="anchored" data-anchor-id="using-monte-carlo-sampling-for-mcda">3.3 Using Monte Carlo Sampling for MCDA</h3>
+<p>In this context, we use Monte Carlo sampling to represent <strong>uncertainty in the weights</strong>.</p>
+<ul>
+<li>Each Monte Carlo sample corresponds to <strong>one possible weighting configuration</strong>.</li>
+<li>Typically, we assume the weights follow a <strong>Dirichlet distribution</strong>, since it ensures they are:
+<ul>
+<li>non-negative, and</li>
+<li>sum to 1.</li>
+</ul></li>
+</ul>
+<p>So for each sample <span class="math inline">\(w^{(n)} = [w_1^{(n)}, \ldots, w_k^{(n)}] \sim Dir(\alpha)\)</span>,<br>
+we compute a suitability map (or its mean, variance, or other summary), giving us an output <span class="math inline">\(S^{(n)}\)</span>.</p>
+<p>By repeating this process many times, we build up a Monte Carlo estimate of:</p>
+<p><span class="math display">\[
+Var(S)
+\]</span></p>
+<p>and can compute Sobol’ indices that tell us: - which criteria (and which combinations of criteria) most affect the variability of the suitability score.</p>
+<hr>
+</section>
+<section id="in-summary" class="level3">
+<h3 class="anchored" data-anchor-id="in-summary">3.4 In Summary</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 13%">
+<col style="width: 55%">
+<col style="width: 31%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Concept</th>
+<th style="text-align: left;">In Classical Sobol’ (e.g., Ishigami)</th>
+<th style="text-align: left;">In GIS/MCDA Context</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Inputs (<span class="math inline">\(X_i\)</span>)</td>
+<td style="text-align: left;">Continuous variables (model factors)</td>
+<td style="text-align: left;">Weights or parameters (<span class="math inline">\(w_i\)</span>)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Sampling</td>
+<td style="text-align: left;">Uniform on defined ranges</td>
+<td style="text-align: left;">Dirichlet (weights sum to 1) or uniform</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Output (<span class="math inline">\(Y\)</span>)</td>
+<td style="text-align: left;">Model result (scalar or array)</td>
+<td style="text-align: left;">Suitability score (map or region mean)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Purpose</td>
+<td style="text-align: left;">Quantify how each factor affects variance</td>
+<td style="text-align: left;">Quantify how each criterion weight affects suitability uncertainty</td>
+</tr>
+</tbody>
+</table>
+<hr>
+</section>
+<section id="intuition" class="level3">
+<h3 class="anchored" data-anchor-id="intuition">3.5 Intuition</h3>
+<ul>
+<li>In MCDA, Sobol’ sensitivity analysis tells you <strong>which weights really matter</strong> — and which could vary without changing the results much.</li>
+<li>The <strong>first-order Sobol’ indices</strong> show which single criteria dominate the suitability pattern.</li>
+<li>The <strong>total-order indices</strong> show where there are <em>interactions</em> (e.g., when two layers together produce strong or unexpected outcomes).</li>
+</ul>
+<p>Thus, the Monte Carlo samples are not “random pixels” — they are <strong>random decision models</strong>, each representing one plausible set of preferences (weight vectors).</p>
+<hr>
+<blockquote class="blockquote">
+<p>In short: in Sobol’ analysis of MCDA, we use Monte Carlo sampling to explore uncertainty in the <em>decision weights</em> — typically by drawing thousands of plausible weight combinations from a Dirichlet distribution — and then measure how those differences propagate through to the final suitability results.</p>
+</blockquote>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../Notebooks/Morris_Elementary_Effects.html" class="pagination-link" aria-label="Morris Sensitivity Analysis (Elementary Effects Method)">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Morris Sensitivity Analysis (Elementary Effects Method)</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

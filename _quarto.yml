@@ -10,9 +10,9 @@ book:
     - index.qmd
     - intro.qmd
     - Notebooks\Kendalls_tau.ipynb
-    - Notebooks\Morris_Elementary_Effects.ipynb 
-    - summary.qmd
-    - references.qmd
+    - Notebooks\Morris_Elementary_Effects.ipynb
+    - Notebooks\Sobol_variance.ipynb
+
 
 bibliography: references.bib
 
