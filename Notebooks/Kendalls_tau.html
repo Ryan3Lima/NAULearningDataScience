@@ -224,7 +224,7 @@ window.Quarto = {
   <li><a href="#compare-manual-calculation-to-scipy.stats" id="toc-compare-manual-calculation-to-scipy.stats" class="nav-link" data-scroll-target="#compare-manual-calculation-to-scipy.stats">Compare manual calculation to scipy.stats</a></li>
   <li><a href="#adding-complexity" id="toc-adding-complexity" class="nav-link" data-scroll-target="#adding-complexity">Adding complexity</a></li>
   <li><a href="#real-world-example---countries-ranked-by-life-expectency-and-gdp" id="toc-real-world-example---countries-ranked-by-life-expectency-and-gdp" class="nav-link" data-scroll-target="#real-world-example---countries-ranked-by-life-expectency-and-gdp">real-world example - Countries Ranked by Life Expectency and GDP</a></li>
-  <li><a href="#conceptual-questions" id="toc-conceptual-questions" class="nav-link" data-scroll-target="#conceptual-questions">CONCEPTUAL QUESTIONS</a></li>
+  <li><a href="#practice-questions" id="toc-practice-questions" class="nav-link" data-scroll-target="#practice-questions">Practice Questions</a></li>
   <li><a href="#spatial-rank-correlation" id="toc-spatial-rank-correlation" class="nav-link" data-scroll-target="#spatial-rank-correlation">Spatial Rank Correlation</a></li>
   <li><a href="#simulated-mcda-suitability" id="toc-simulated-mcda-suitability" class="nav-link" data-scroll-target="#simulated-mcda-suitability">simulated MCDA suitability</a></li>
   <li><a href="#review-questions" id="toc-review-questions" class="nav-link" data-scroll-target="#review-questions">Review Questions</a>
@@ -1004,17 +1004,20 @@ p-value = 0.02515424</code></pre>
 </div>
 <p>The analysis of country rank in terms of GDP per capita vs life expectancy using Kendall’s tau tells us that overall life expectency is correlated with GDP per capita in terms of how contries compare to eachother (rank), however the correlation is much worse in the rich countries, why might that be?</p>
 </section>
-<section id="conceptual-questions" class="level2">
-<h2 class="anchored" data-anchor-id="conceptual-questions">CONCEPTUAL QUESTIONS</h2>
+<section id="practice-questions" class="level2">
+<h2 class="anchored" data-anchor-id="practice-questions">Practice Questions</h2>
 <ol type="1">
 <li>Is Kendall’s Tau a good way to measure the correlation of these two variables?</li>
 </ol>
 <blockquote class="blockquote">
-<p>answer: Its more approriate to look at how the Life Expectency values compare to the GDP per capita directly using Pearson’s R, which compares one number to another. Kendall’s Tau is for comparing the ranks, so the colored rank figure shows us that countries below the line, are under performing in terms of life expectancy vs GDP relative to their neighbors. It is also telling us the the GDP life expectency relationship breaks down at higher levels of GDP or is less meaningful.</p>
+<p><em>answer: Its more approriate to look at how the Life Expectency values compare to the GDP per capita directly using Pearson’s R, which compares one number to another. Kendall’s Tau is for comparing the ranks, so the colored rank figure shows us that countries below the line, are under performing in terms of life expectancy vs GDP relative to their neighbors. It is also telling us the the GDP life expectency relationship breaks down at higher levels of GDP or is less meaningful.</em></p>
 </blockquote>
 <ol start="2" type="1">
 <li>Why might this relationship breakdown when subsetting the data to only the richest countries?</li>
 </ol>
+<blockquote class="blockquote">
+<p><em>answer: Several potential reasons….once you have enough money to pay for healthcare and have access to good food, increases in GDP after a certain point stop increasing lifespan. Also with inequality growing, perhaps the per capita GDP is misleading perhaps median income might be a better metric than per capita GDP.</em></p>
+</blockquote>
 </section>
 <section id="spatial-rank-correlation" class="level2">
 <h2 class="anchored" data-anchor-id="spatial-rank-correlation">Spatial Rank Correlation</h2>

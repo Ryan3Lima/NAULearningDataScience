@@ -1567,10 +1567,25 @@ w_\text{int},f_\text{int}(p_{ij}, r_{ij})
 </div>
 </div>
 </div>
-<section id="conceptual-questions" class="level4">
-<h4 class="anchored" data-anchor-id="conceptual-questions">Conceptual Questions</h4>
+<section id="practice-questions" class="level4">
+<h4 class="anchored" data-anchor-id="practice-questions">Practice questions</h4>
+<ol type="1">
+<li>Which weight most strongly controls (<span class="math inline">\(\mu^*\)</span>) how much of the map is deemed suitable or good (gte 7)?</li>
+</ol>
 <blockquote class="blockquote">
-<p>Which weight most strongly controls (<span class="math inline">\(\mu^*\)</span>) how much of the map is deemed suitable or good (gte 7) Which weight’s effect is stable vs.&nbsp;only matters in some regimes? Does the interaction weight (w_int) have a high <span class="math inline">\(\sigma\)</span>? <em>(it should because we designed it to matter more when both permeability and rain are favorable)</em></p>
+<p><em>answer: w_slope has the highest <span class="math inline">\(\mu^*\)</span> or overall effect.</em></p>
+</blockquote>
+<ol start="2" type="1">
+<li>Which weight’s effect is stable vs.&nbsp;only matters in some regimes?</li>
+</ol>
+<blockquote class="blockquote">
+<p><em>answer:The weight whose effect is most stable (low variability) is <strong>w_perm</strong>, since it has the smallest <span class="math inline">\(\sigma\)</span> value (0.0267). This means its influence on suitability is consistent across different weighting combinations, while <strong>w_slope</strong> shows more variability and context dependence.</em></p>
+</blockquote>
+<ol start="3" type="1">
+<li>Does the interaction weight (w_int) have a high <span class="math inline">\(\sigma\)</span>? <em>(it should because we designed it to matter more when both permeability and rain are favorable)</em></li>
+</ol>
+<blockquote class="blockquote">
+<p><em>answer:The interaction weight <strong>w_int</strong> does <strong>not</strong> have the highest <span class="math inline">\(\sigma\)</span> in this run (its value, 0.0344, is moderate), but it still shows some variability. This suggests it behaves somewhat nonlinearly — its effect depends on permeability and rainfall conditions — though not as strongly as expected in this specific simulation.</em></p>
 </blockquote>
 </section>
 </section>
